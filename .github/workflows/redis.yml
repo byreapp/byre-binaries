@@ -1,0 +1,97 @@
+# Builds Redis (download.redis.io) and Valkey (GitHub source archive) from source
+# for macOS and Linux and publishes each as a PRERELEASE tagged <engine>-<version>,
+# assets <engine>-<version>-<triple>.tar.gz + .sha256. No Windows: neither
+# project supports it natively. Byre doesn't ship Redis/Valkey yet.
+#
+# Tarball layout: <engine>-<version>-<triple>/bin/<engine>-server, -cli, …
+#
+# Run: Actions → Redis + Valkey → Run workflow. engine "all" + version "all"
+# builds everything in versions.json not fully published yet.
+name: Redis + Valkey
+
+on:
+  workflow_dispatch:
+    inputs:
+      engine:
+        description: redis, valkey, or "all"
+        default: all
+      version:
+        description: Version in versions.json, or "all"
+        default: all
+
+permissions:
+  contents: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      builds: ${{ steps.p.outputs.builds }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: p
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ENGINE: ${{ inputs.engine }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          builds='[]'
+          for e in redis valkey; do
+            [ "$ENGINE" = all ] || [ "$ENGINE" = "$e" ] || continue
+            vs=$(scripts/plan.sh "$e" "$VERSION")
+            builds=$(jq -c --arg e "$e" --argjson vs "$vs" '. + [$vs[] | {engine: $e, version: .}]' <<<"$builds")
+          done
+          echo "builds=$builds" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: plan
+    if: needs.plan.outputs.builds != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        build: ${{ fromJSON(needs.plan.outputs.builds) }}
+        target:
+          - { os: macos-latest, platform: macos-arm64, triple: aarch64-apple-darwin }
+          - { os: macos-15-intel, platform: macos-x64, triple: x86_64-apple-darwin }
+          - { os: ubuntu-22.04, platform: linux-x64, triple: x86_64-unknown-linux-gnu }
+          - { os: ubuntu-22.04-arm, platform: linux-arm64, triple: aarch64-unknown-linux-gnu }
+    runs-on: ${{ matrix.target.os }}
+    env:
+      ENGINE: ${{ matrix.build.engine }}
+      VERSION: ${{ matrix.build.version }}
+      NAME: ${{ matrix.build.engine }}-${{ matrix.build.version }}-${{ matrix.target.triple }}
+    steps:
+      - uses: actions/checkout@v4
+      - if: runner.os == 'Linux'
+        run: sudo apt-get install -yq patchelf
+      - name: Build
+        run: scripts/build-redis.sh "$ENGINE" "$VERSION" "out/$NAME"
+      - name: Package
+        run: mkdir -p dist && tar czf "dist/$NAME.tar.gz" -C out "$NAME"
+      - name: Smoke test
+        run: scripts/test-redis.sh "$ENGINE" "dist/$NAME.tar.gz"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.NAME }}
+          path: dist/*.tar.gz
+
+  publish:
+    needs: [plan, build]
+    # Publish whatever built; a later "all" run retries missing platforms.
+    if: always() && needs.plan.outputs.builds != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        build: ${{ fromJSON(needs.plan.outputs.builds) }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ${{ matrix.build.engine }}-${{ matrix.build.version }}-*
+          path: dist
+          merge-multiple: true
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/publish.sh "${{ matrix.build.engine }}" "${{ matrix.build.version }}"
