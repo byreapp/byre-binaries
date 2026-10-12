@@ -4,7 +4,8 @@
 # (Separate from postgres.yml, which builds from source as postgres-<exact>.)
 #
 # Run: Actions → Postgres mirror → Run workflow, after adding a version to
-# versions.json (`postgres.versions`). Already-mirrored versions are skipped.
+# versions.json (`postgres.versions`). Already-mirrored versions are skipped,
+# and so are betas (theseus doesn't publish them).
 name: Postgres mirror
 
 on:
@@ -24,7 +25,7 @@ jobs:
         run: |
           set -euo pipefail
           triples="aarch64-apple-darwin x86_64-apple-darwin x86_64-unknown-linux-gnu aarch64-unknown-linux-gnu x86_64-pc-windows-msvc"
-          for exact in $(jq -r '.postgres.versions[]' versions.json); do
+          for exact in $(jq -r '.postgres.versions[] | select(test("^[0-9.]+$"))' versions.json); do
             tag="pg-$exact"
             if gh release view "$tag" >/dev/null 2>&1; then echo "$tag already mirrored"; continue; fi
             rm -rf dl && mkdir dl

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Builds PostgreSQL <version> (catalog form, e.g. 18.6.0) from the official
+# Builds PostgreSQL <version> (catalog form, e.g. 18.6.0, or a beta like 19beta4) from the official
 # source tarball into <prefix> and makes it relocatable. Layout matches theseus:
 # bin/ lib/ share/ include/ (prefix contains "postgres", so no postgresql/ subdirs).
 # Features: openssl, icu, lz4, zlib, uuid-ossp (not Windows), libedit (not Windows).
 set -euo pipefail
 version=$1 prefix=$2
 here=$(cd "$(dirname "$0")" && pwd)
-src_ver=${version%.*} # 18.6.0 -> 18.6
-major=${version%%.*}
+src_ver=${version%.*} # 18.6.0 -> 18.6; 19beta4 stays 19beta4
+major=${version%%[.a-z]*}
 rm -rf "$prefix" "$prefix-src" && mkdir -p "$prefix" "$prefix-src"
 prefix=$(cd "$prefix" && pwd)
 work="$prefix-src"
@@ -43,6 +43,8 @@ case "$(uname -s)" in
     # Needs: MSVC dev env (ilammy/msvc-dev-cmd), vcpkg deps installed by the
     # workflow at $VCPKG_INSTALLED, meson+ninja, winflexbison on PATH.
     deps=$(cygpath -m "$VCPKG_INSTALLED")
+    # Git's /usr/bin/link (coreutils) shadows MSVC's link.exe otherwise.
+    export PATH="$(cygpath -u "$VCToolsInstallDir")/bin/Hostx64/x64:$PATH"
     if [ "$major" -ge 16 ]; then
       export PKG_CONFIG="$deps/tools/pkgconf/pkgconf.exe"
       export PKG_CONFIG_PATH="$deps/lib/pkgconfig;$deps/share/pkgconfig"
