@@ -80,6 +80,8 @@ jobs:
       - name: Build for every Postgres major
         run: |
           set -euo pipefail
+          # Windows' jq ends lines with \r, which ends up in URLs (404).
+          jq() { command jq "$@" | tr -d '\r'; }
           ext=$(jq -c --arg n "$EXT" '.extensions[] | select(.name == $n)' extensions.json)
           ver=$(jq -r .version <<<"$ext")
           repo=$(jq -r .source <<<"$ext")
