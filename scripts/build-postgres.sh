@@ -50,7 +50,8 @@ case "$(uname -s)" in
     # workflow at $VCPKG_INSTALLED, meson+ninja, winflexbison on PATH.
     deps=$(cygpath -m "$VCPKG_INSTALLED")
     # Git's /usr/bin/link (coreutils) shadows MSVC's link.exe otherwise.
-    export PATH="$(cygpath -u "$VCToolsInstallDir")/bin/Hostx64/x64:$PATH"
+    # Strawberry perl too: Git's MSYS perl mangles /nologo-style args to the MSVC tools.
+    export PATH="/c/Strawberry/perl/bin:$(cygpath -u "$VCToolsInstallDir")/bin/Hostx64/x64:$PATH"
     if [ "$major" -ge 16 ]; then
       export PKG_CONFIG="$deps/tools/pkgconf/pkgconf.exe"
       export PKG_CONFIG_PATH="$deps/lib/pkgconfig;$deps/share/pkgconfig"
