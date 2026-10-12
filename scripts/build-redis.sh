@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Builds redis or valkey <version> from the official source into <prefix>/bin.
-# No TLS and no Redis 8 modules (they need Rust and more); plain `make`.
+# No TLS and no Redis 8 modules.
 set -euo pipefail
 engine=$1 version=$2 prefix=$3
 here=$(cd "$(dirname "$0")" && pwd)
@@ -12,8 +12,10 @@ case "$engine" in
 esac
 curl -fsSL "$url" | tar xz -C "$prefix-src" --strip-components=1
 cd "$prefix-src"
-make -j"$(getconf _NPROCESSORS_ONLN)"
-make install PREFIX="$prefix"
+# src/ directly: Redis 8's top-level `make` also builds the modules (search,
+# json, …), which need Rust and GNU make 4.
+make -C src -j"$(getconf _NPROCESSORS_ONLN)"
+make -C src install PREFIX="$prefix"
 cp COPYING LICENSE* "$prefix/" 2>/dev/null || true
 case "$(uname -s)" in
   Darwin) "$here/relocate-macos.sh" "$prefix" ;;

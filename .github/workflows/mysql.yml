@@ -1,0 +1,99 @@
+# Builds MySQL from the official source tarball (cdn.mysql.com) and publishes
+# each version as a PRERELEASE tagged mysql-<version>, assets
+# mysql-<version>-<triple>.tar.gz + .sha256. Heavy: ~1-2 h per platform.
+# No Windows build (MSVC source build not attempted yet). Byre still downloads
+# the vendor's binaries; these aren't used yet.
+#
+# Tarball layout: mysql-<version>-<triple>/{bin,lib,share,…} (cmake install),
+# relocatable the same way as Postgres (see scripts/relocate-*.sh).
+#
+# Run: Actions → MySQL → Run workflow. "all" builds every version not fully
+# published yet; a version rebuilds that one (assets are replaced).
+name: MySQL
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version in versions.json (e.g. 9.7.2), or "all"
+        default: all
+
+permissions:
+  contents: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.p.outputs.versions }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: p
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: echo "versions=$(scripts/plan.sh mysql "$VERSION")" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: plan
+    if: needs.plan.outputs.versions != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ${{ fromJSON(needs.plan.outputs.versions) }}
+        target:
+          - { os: macos-latest, platform: macos-arm64, triple: aarch64-apple-darwin }
+          - { os: macos-15-intel, platform: macos-x64, triple: x86_64-apple-darwin }
+          - { os: ubuntu-22.04, platform: linux-x64, triple: x86_64-unknown-linux-gnu }
+          - { os: ubuntu-22.04-arm, platform: linux-arm64, triple: aarch64-unknown-linux-gnu }
+    runs-on: ${{ matrix.target.os }}
+    timeout-minutes: 360
+    env:
+      NAME: mysql-${{ matrix.version }}-${{ matrix.target.triple }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Linux deps
+        if: runner.os == 'Linux'
+        run: |
+          # The build tree needs ~15 GB; the image ships far less free.
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          sudo apt-get update -q && sudo apt-get install -yq libssl-dev libncurses-dev libtirpc-dev bison ninja-build pkg-config patchelf
+      - name: macOS deps
+        if: runner.os == 'macOS'
+        run: |
+          brew install openssl@3 ninja bison
+          echo "$(brew --prefix bison)/bin" >> "$GITHUB_PATH" # Apple's bison 2.3 is too old
+      - name: Build
+        run: scripts/build-mysql.sh "${{ matrix.version }}" "out/$NAME"
+      - name: Package
+        run: mkdir -p dist && tar czf "dist/$NAME.tar.gz" -C out "$NAME"
+      - name: Smoke test
+        run: scripts/test-mysql.sh "dist/$NAME.tar.gz"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.NAME }}
+          path: dist/*.tar.gz
+
+  publish:
+    needs: [plan, build]
+    # Publish whatever built: one platform failing shouldn't hold back the rest
+    # (a later "all" run retries the missing ones).
+    if: always() && needs.plan.outputs.versions != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ${{ fromJSON(needs.plan.outputs.versions) }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: mysql-${{ matrix.version }}-*
+          path: dist
+          merge-multiple: true
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/publish.sh mysql "${{ matrix.version }}"

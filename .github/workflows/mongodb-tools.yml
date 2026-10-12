@@ -1,0 +1,66 @@
+# Builds the MongoDB Database Tools (mongodump, mongorestore, …) from the
+# mongodb/mongo-tools tag and publishes each version as a PRERELEASE tagged
+# mongodb-tools-<version>, assets mongodb-tools-<version>-<triple>.tar.gz + .sha256.
+#
+# Pure Go with CGO off (TLS via Go's crypto/tls; no Kerberos/GSSAPI auth), so
+# one Linux job cross-compiles every platform. Byre still downloads the
+# vendor's tools; these aren't used yet.
+#
+# Tarball layout: mongodb-tools-<version>-<triple>/bin/<tool>[.exe]
+name: MongoDB Tools
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version in versions.json (e.g. 100.19.1), or "all"
+        default: all
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: p
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: echo "versions=$(scripts/plan.sh mongodb-tools "$VERSION" | jq -r 'join(" ")')" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-go@v5
+        if: steps.p.outputs.versions != ''
+        with:
+          go-version: stable
+      - name: Build, smoke test, publish
+        if: steps.p.outputs.versions != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSIONS: ${{ steps.p.outputs.versions }}
+        run: |
+          set -euo pipefail
+          for v in $VERSIONS; do
+            rm -rf src && git clone -q --depth 1 --branch "$v" https://github.com/mongodb/mongo-tools src
+            commit=$(git -C src rev-parse HEAD)
+            # GOOS GOARCH triple
+            while read -r goos goarch triple; do
+              name="mongodb-tools-$v-$triple"
+              ext=; [ "$goos" = windows ] && ext=.exe
+              for t in bsondump mongodump mongoexport mongofiles mongoimport mongorestore mongostat mongotop; do
+                (cd src && CGO_ENABLED=0 GOOS=$goos GOARCH=$goarch go build -trimpath \
+                  -ldflags "-s -w -X main.VersionStr=$v -X main.GitCommit=$commit" \
+                  -o "../out/$name/bin/$t$ext" "./$t/main")
+              done
+              cp src/LICENSE* "out/$name/"
+              mkdir -p dist && tar czf "dist/$name.tar.gz" -C out "$name"
+            done <<'EOF'
+          darwin arm64 aarch64-apple-darwin
+          darwin amd64 x86_64-apple-darwin
+          linux amd64 x86_64-unknown-linux-gnu
+          linux arm64 aarch64-unknown-linux-gnu
+          windows amd64 x86_64-pc-windows-msvc
+          EOF
+            "out/mongodb-tools-$v-x86_64-unknown-linux-gnu/bin/mongodump" --version
+            scripts/publish.sh mongodb-tools "$v"
+          done
