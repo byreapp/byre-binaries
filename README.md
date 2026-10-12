@@ -24,6 +24,11 @@ values; Redis and Valkey are the latest stable releases.
 | mongodb-tools | mongodb/mongo-tools tag | all five (Go cross-compile, CGO off) | `mongodb-tools.yml` |
 | mongodb | mongodb/mongo `r<version>` tag | linux-x64, **manual, large runner** | `mongodb.yml` |
 
+Separately, `postgres-mirror.yml` mirrors the theseus tarballs Byre downloads
+today (checksum-verified) as prereleases tagged `pg-<exact>`, same versions as
+`versions.json`'s `postgres` list, so installs don't depend on theseus' releases
+staying up. Those keep theseus' asset names (`postgresql-<exact>-<triple>.tar.gz`).
+
 Each version is published as a **prerelease** tagged `<engine>-<version>` with
 assets `<engine>-<version>-<triple>.tar.gz` and a matching `.sha256`. Triples:
 `aarch64-apple-darwin`, `x86_64-apple-darwin`, `x86_64-unknown-linux-gnu`,

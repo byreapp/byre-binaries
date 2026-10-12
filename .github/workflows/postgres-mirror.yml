@@ -1,0 +1,42 @@
+# Mirrors the PostgreSQL server binaries Byre downloads today (theseus-rs builds)
+# into this repo as PRERELEASES tagged pg-<exact>, so installs never depend on a
+# third party's releases staying up. Checks each file against theseus' .sha256.
+# (Separate from postgres.yml, which builds from source as postgres-<exact>.)
+#
+# Run: Actions → Postgres mirror → Run workflow, after adding a version to
+# versions.json (`postgres.versions`). Already-mirrored versions are skipped.
+name: Postgres mirror
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mirror
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          triples="aarch64-apple-darwin x86_64-apple-darwin x86_64-unknown-linux-gnu aarch64-unknown-linux-gnu x86_64-pc-windows-msvc"
+          for exact in $(jq -r '.postgres.versions[]' versions.json); do
+            tag="pg-$exact"
+            if gh release view "$tag" >/dev/null 2>&1; then echo "$tag already mirrored"; continue; fi
+            rm -rf dl && mkdir dl
+            for t in $triples; do
+              f="postgresql-$exact-$t.tar.gz"
+              base="https://github.com/theseus-rs/postgresql-binaries/releases/download/$exact"
+              curl -fsSL "$base/$f" -o "dl/$f"
+              curl -fsSL "$base/$f.sha256" -o "dl/$f.sha256"
+              # The Windows .sha256 is certutil output, so take the 64-hex token from either format.
+              (cd dl && echo "$(grep -oiE '[0-9a-f]{64}' "$f.sha256" | head -1)  $f" | sha256sum -c -)
+            done
+            gh release create "$tag" dl/* --prerelease --latest=false \
+              --title "PostgreSQL $exact (server binaries for Byre)" \
+              --notes "Mirror of theseus-rs/postgresql-binaries $exact, checksums verified, for Byre."
+          done
