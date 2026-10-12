@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Problem with the Byre app
+    url: https://github.com/byreapp/byre-releases/issues/new/choose
+    about: App bugs and feature requests go to byreapp/byre-releases. Use this repo only for problems with a build here.
+  - name: Security problem
+    url: https://github.com/byreapp/byre-releases/security/advisories/new
+    about: Report it privately, not in a public issue.
