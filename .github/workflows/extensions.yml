@@ -1,0 +1,180 @@
+# Builds the downloadable Postgres extensions listed in extensions.json and
+# publishes each as a PRERELEASE tagged ext-<name>-<version>, so it never becomes
+# `latest` (the updater's latest.json) or shows on byre.app/changelog.
+#
+# Lives in this public repo (free Actions minutes, macOS + Windows included),
+# not the private source repo. extensions.json mirrors the `extensions`
+# and Postgres `exact` versions of src-tauri/catalog.json in byreapp/byre — bump
+# both together.
+#
+# Each build compiles against the exact theseus binaries Byre downloads for that
+# major, so the ABI always matches. Tarball layout:
+#   lib/…  share/extension/…   (whatever `make install` added)
+#
+# Run: Actions → Extensions → Run workflow. "all" builds every extension whose
+# release doesn't exist yet; a name rebuilds that one (assets are replaced).
+name: Extensions
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: Extension name in extensions.json, or "all"
+        default: all
+
+permissions:
+  contents: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      exts: ${{ steps.p.outputs.exts }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: p
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NAME: ${{ inputs.name }}
+        run: |
+          set -euo pipefail
+          exts=()
+          while read -r n v; do
+            if [ "$NAME" = all ]; then
+              gh release view "ext-$n-$v" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 && continue
+            elif [ "$NAME" != "$n" ]; then
+              continue
+            fi
+            exts+=("$n")
+          done < <(jq -r '.extensions[] | "\(.name) \(.version)"' extensions.json)
+          if [ "$NAME" != all ] && [ ${#exts[@]} -eq 0 ]; then echo "No extension named $NAME"; exit 1; fi
+          echo "exts=$(printf '%s\n' "${exts[@]}" | jq -Rnc '[inputs | select(length > 0)]')" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: plan
+    if: needs.plan.outputs.exts != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        ext: ${{ fromJSON(needs.plan.outputs.exts) }}
+        target:
+          - { os: macos-latest, platform: macos-arm64, triple: aarch64-apple-darwin }
+          - { os: macos-15-intel, platform: macos-x64, triple: x86_64-apple-darwin }
+          # 22.04 = older glibc, so the .so loads on more distros.
+          - { os: ubuntu-22.04, platform: linux-x64, triple: x86_64-unknown-linux-gnu }
+          - { os: ubuntu-22.04-arm, platform: linux-arm64, triple: aarch64-unknown-linux-gnu }
+          - { os: windows-latest, platform: windows-x64, triple: x86_64-pc-windows-msvc }
+    runs-on: ${{ matrix.target.os }}
+    env:
+      EXT: ${{ matrix.ext }}
+      # Not PLATFORM: msvc-dev-cmd sets that to "x64" on Windows.
+      BYRE_PLATFORM: ${{ matrix.target.platform }}
+      TRIPLE: ${{ matrix.target.triple }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: runner.os == 'Windows'
+      - name: Build for every Postgres major
+        run: |
+          set -euo pipefail
+          ext=$(jq -c --arg n "$EXT" '.extensions[] | select(.name == $n)' extensions.json)
+          ver=$(jq -r .version <<<"$ext")
+          repo=$(jq -r .source <<<"$ext")
+          build=$(jq -r '.build // "pgxs"' <<<"$ext")
+          mkdir -p dist
+          if ! jq -e --arg p "$BYRE_PLATFORM" '.platforms | index($p)' <<<"$ext" >/dev/null; then
+            echo "$EXT isn't built for $BYRE_PLATFORM"; exit 0
+          fi
+          # Tags are v1.2.3 for most projects, bare 1.2.3 for some (hypopg, timescaledb).
+          mkdir src
+          curl -fsSL "$repo/archive/refs/tags/v$ver.tar.gz" -o src.tgz ||
+            curl -fsSL "$repo/archive/refs/tags/$ver.tar.gz" -o src.tgz
+          tar xzf src.tgz -C src --strip-components=1
+          src="$PWD/src"
+          for m in $(jq -r '.majors[]' <<<"$ext"); do
+            exact=$(jq -r --arg m "$m" '.postgres[] | select(.major == $m) | .exact' extensions.json)
+            rm -rf pg out added.txt && mkdir pg
+            curl -fsSL "https://github.com/theseus-rs/postgresql-binaries/releases/download/$exact/postgresql-$exact-$TRIPLE.tar.gz" | tar xz -C pg
+            root=$(cd "$(dirname "$(find "$PWD/pg" -path '*/bin/pg_config*' | head -1)")/.." && pwd)
+            cfg="$root/bin/pg_config"
+            # Snapshot, so packaging takes exactly what the install added (names
+            # vary: timescaledb-<ver>.so, pg_partman_bgw.so, …).
+            before=$(cd "$root" && find lib share/extension -type f | sort)
+            if [ "$RUNNER_OS" = Windows ]; then
+              # Makefile.win installs straight into PGROOT.
+              (cd "$src" && PGROOT="$(cygpath -w "$root")" nmake /NOLOGO /F Makefile.win clean all install)
+            elif [ "$build" = cmake ]; then
+              # theseus' pg_config names its CI's Xcode SDK; cmake reads it raw, so
+              # front it with one that names this runner's SDK.
+              if [ "$RUNNER_OS" = macOS ]; then
+                sdk=$(xcrun --show-sdk-path)
+                printf '#!/bin/sh\n"%s" "$@" | sed "s#-isysroot [^ ]*#-isysroot %s#g"\n' "$cfg" "$sdk" > "$PWD/pg_config_byre"
+                chmod +x "$PWD/pg_config_byre"
+                cmcfg="$PWD/pg_config_byre"
+              else
+                cmcfg="$cfg"
+              fi
+              rm -rf "$src/build"
+              (cd "$src" && ./bootstrap -DPG_CONFIG="$cmcfg" -DAPACHE_ONLY=ON -DREGRESS_CHECKS=OFF -DTAP_CHECKS=OFF \
+                -DWARNINGS_AS_ERRORS=OFF -DSEND_TELEMETRY_DEFAULT=OFF -DUSE_OPENSSL=OFF -DCMAKE_BUILD_TYPE=Release)
+              make -C "$src/build" -j4
+              make -C "$src/build" install
+            else
+              # OPTFLAGS="": no -march=native, so it runs on any CPU of the arch.
+              # PG_SYSROOT: theseus' pg_config names its CI's Xcode SDK path.
+              # $ORIGIN rpath: extensions linking libpq (pg_cron) find the bundled one.
+              # Compiler = the one theseus built with (its CFLAGS carry gcc-only
+              # flags on Linux, which -Werror projects like pg_cron trip over).
+              extra=()
+              [ "$RUNNER_OS" = macOS ] && extra+=(CC=clang "PG_SYSROOT=$(xcrun --show-sdk-path)")
+              [ "$RUNNER_OS" = Linux ] && extra+=('PG_LDFLAGS=-Wl,-rpath,$$ORIGIN')
+              make -C "$src" PG_CONFIG="$cfg" clean >/dev/null # objects from the previous major
+              make -C "$src" PG_CONFIG="$cfg" OPTFLAGS="" "${extra[@]}" -j4
+              make -C "$src" PG_CONFIG="$cfg" install
+            fi
+            after=$(cd "$root" && find lib share/extension -type f | sort)
+            comm -13 <(echo "$before") <(echo "$after") > added.txt
+            mkdir out && tar cf - -C "$root" -T added.txt | tar xf - -C out
+            ls out/lib/* out/share/extension/"$EXT".control >/dev/null # fail if nothing was built
+            tar czf "dist/$EXT-$ver-pg$m-$BYRE_PLATFORM.tar.gz" -C out lib share
+          done
+          ls -l dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.ext }}-${{ matrix.target.platform }}
+          path: dist/*.tar.gz
+          if-no-files-found: ignore
+
+  publish:
+    needs: [plan, build]
+    # Publish whatever built: one platform failing shouldn't hold back the rest.
+    if: always() && needs.plan.outputs.exts != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        ext: ${{ fromJSON(needs.plan.outputs.exts) }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ${{ matrix.ext }}-*
+          path: dist
+          merge-multiple: true
+      - name: Publish prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXT: ${{ matrix.ext }}
+        run: |
+          set -euo pipefail
+          ls dist/*.tar.gz >/dev/null 2>&1 || { echo "Nothing built for $EXT"; exit 1; }
+          ver=$(jq -r --arg n "$EXT" '.extensions[] | select(.name == $n) | .version' extensions.json)
+          tag="ext-$EXT-$ver"
+          gh release view "$tag" >/dev/null 2>&1 ||
+            gh release create "$tag" --prerelease --latest=false \
+              --title "$EXT $ver (Postgres extension for Byre)" \
+              --notes "Prebuilt $EXT $ver for Byre's PostgreSQL servers. Byre downloads these itself."
+          gh release upload "$tag" dist/*.tar.gz --clobber
