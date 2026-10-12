@@ -106,8 +106,9 @@ jobs:
             # vary: timescaledb-<ver>.so, pg_partman_bgw.so, …).
             before=$(cd "$root" && find lib share/extension -type f | sort)
             if [ "$RUNNER_OS" = Windows ]; then
-              # Makefile.win installs straight into PGROOT.
-              (cd "$src" && PGROOT="$(cygpath -w "$root")" nmake /NOLOGO /F Makefile.win clean all install)
+              # Makefile.win installs straight into PGROOT. "-" options: Git Bash
+              # would rewrite "/F" into a path.
+              (cd "$src" && PGROOT="$(cygpath -w "$root")" nmake -NOLOGO -f Makefile.win clean all install)
             elif [ "$build" = cmake ]; then
               # theseus' pg_config names its CI's Xcode SDK; cmake reads it raw, so
               # front it with one that names this runner's SDK.
