@@ -11,7 +11,13 @@ major=${version%%[.a-z]*}
 rm -rf "$prefix" "$prefix-src" && mkdir -p "$prefix" "$prefix-src"
 prefix=$(cd "$prefix" && pwd)
 work="$prefix-src"
-curl -fsSL "https://ftp.postgresql.org/pub/source/v$src_ver/postgresql-$src_ver.tar.bz2" | tar xj -C "$work" --strip-components=1
+if [[ $(uname -s) == MINGW* && $major == 16 ]]; then
+  # 16's tarball ships distprep output (gram.c, …), which meson refuses to build
+  # over. 17+ tarballs don't, so only 16 on Windows builds from the git tag.
+  git clone -q --depth 1 --branch "REL_${src_ver//./_}" https://github.com/postgres/postgres "$work"
+else
+  curl -fsSL "https://ftp.postgresql.org/pub/source/v$src_ver/postgresql-$src_ver.tar.bz2" | tar xj -C "$work" --strip-components=1
+fi
 cd "$work"
 
 unix_build() {
