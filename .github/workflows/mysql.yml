@@ -1,8 +1,8 @@
 # Builds MySQL from the official source tarball (cdn.mysql.com) and publishes
 # each version as a PRERELEASE tagged mysql-<version>, assets
 # mysql-<version>-<triple>.tar.gz + .sha256. Heavy: ~1-2 h per platform.
-# No Windows build (MSVC source build not attempted yet). Byre still downloads
-# the vendor's binaries; these aren't used yet.
+# Windows builds with MSVC + vcpkg OpenSSL. Byre still downloads the vendor's
+# binaries; these aren't used yet.
 #
 # Tarball layout: mysql-<version>-<triple>/{bin,lib,share,…} (cmake install),
 # relocatable the same way as Postgres (see scripts/relocate-*.sh).
@@ -46,6 +46,7 @@ jobs:
           - { os: macos-15-intel, platform: macos-x64, triple: x86_64-apple-darwin }
           - { os: ubuntu-22.04, platform: linux-x64, triple: x86_64-unknown-linux-gnu }
           - { os: ubuntu-22.04-arm, platform: linux-arm64, triple: aarch64-unknown-linux-gnu }
+          - { os: windows-latest, platform: windows-x64, triple: x86_64-pc-windows-msvc }
     runs-on: ${{ matrix.target.os }}
     timeout-minutes: 360
     env:
@@ -66,6 +67,25 @@ jobs:
         run: |
           brew install openssl@3 ninja bison
           echo "$(brew --prefix bison)/bin" >> "$GITHUB_PATH" # Apple's bison 2.3 is too old
+      - uses: actions/cache@v4
+        if: runner.os == 'Windows'
+        with:
+          path: ${{ runner.temp }}/vcpkg-cache
+          key: vcpkg-mysql-v1
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: runner.os == 'Windows'
+      - name: Windows deps
+        if: runner.os == 'Windows'
+        env:
+          VCPKG_DEFAULT_BINARY_CACHE: ${{ runner.temp }}/vcpkg-cache
+        run: |
+          set -euo pipefail
+          mkdir -p "$VCPKG_DEFAULT_BINARY_CACHE"
+          vcpkg="$(cygpath -u "$VCPKG_INSTALLATION_ROOT")"
+          "$vcpkg/vcpkg.exe" install --triplet x64-windows --clean-after-build openssl
+          echo "VCPKG_INSTALLED=$vcpkg/installed/x64-windows" >> "$GITHUB_ENV"
+          python -m pip install -q ninja
+          choco install winflexbison3 -y --no-progress
       - name: Build
         run: scripts/build-mysql.sh "${{ matrix.version }}" "out/$NAME"
       - name: Package

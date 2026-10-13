@@ -9,6 +9,8 @@ here=$(cd "$(dirname "$0")" && pwd)
 rm -rf "$prefix" "$prefix-src" && mkdir -p "$prefix" "$prefix-src"
 prefix=$(cd "$prefix" && pwd)
 src="$prefix-src"
+# Short source path on Windows: the build tree's paths pass MAX_PATH (260) otherwise.
+[[ $(uname -s) == MINGW* ]] && src=/d/m && rm -rf "$src" && mkdir -p "$src"
 curl -fsSL "https://cdn.mysql.com/Downloads/MySQL-${version%.*}/mysql-$version.tar.gz" | tar xz -C "$src" --strip-components=1
 
 opts=(
@@ -24,6 +26,12 @@ case "$(uname -s)" in
     opts+=(-DWITH_SSL="$(brew --prefix openssl@3)" -DCMAKE_EXE_LINKER_FLAGS=-Wl,-headerpad_max_install_names
       -DCMAKE_SHARED_LINKER_FLAGS=-Wl,-headerpad_max_install_names -DCMAKE_MODULE_LINKER_FLAGS=-Wl,-headerpad_max_install_names) ;;
   Linux) opts+=(-DWITH_SSL=system) ;;
+  MINGW*)
+    # Needs: MSVC dev env, vcpkg openssl at $VCPKG_INSTALLED, ninja and
+    # winflexbison on PATH (see mysql.yml). Git's coreutils `link` would shadow MSVC's.
+    export PATH="$(cygpath -u "$VCToolsInstallDir")/bin/Hostx64/x64:$PATH"
+    opts+=(-DCMAKE_INSTALL_PREFIX="$(cygpath -m "$prefix")" -DWITH_SSL="$(cygpath -m "$VCPKG_INSTALLED")" -DBISON_EXECUTABLE="$(cygpath -m "$(command -v win_bison.exe)")"
+      -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl) ;;
 esac
 cmake -S "$src" -B "$src/build" "${opts[@]}"
 cmake --build "$src/build"
@@ -32,4 +40,5 @@ rm -rf "$src" # frees ~10 GB before packaging
 case "$(uname -s)" in
   Darwin) "$here/relocate-macos.sh" "$prefix" ;;
   Linux) "$here/relocate-linux.sh" "$prefix" ;;
+  MINGW*) cp "$VCPKG_INSTALLED"/bin/*.dll "$prefix/bin/" ;; # Windows looks next to the .exe
 esac

@@ -77,6 +77,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ilammy/msvc-dev-cmd@v1
         if: runner.os == 'Windows'
+      - if: runner.os == 'Windows'
+        run: choco install make -y --no-progress # reads PGXS Makefiles (build-ext-windows.sh)
       - name: Build for every Postgres major
         run: |
           set -euo pipefail
@@ -105,10 +107,19 @@ jobs:
             # Snapshot, so packaging takes exactly what the install added (names
             # vary: timescaledb-<ver>.so, pg_partman_bgw.so, …).
             before=$(cd "$root" && find lib share/extension -type f | sort)
-            if [ "$RUNNER_OS" = Windows ]; then
+            if [ "$RUNNER_OS" = Windows ] && [ "$build" = cmake ]; then
+              rm -rf "$src/build"
+              cmake -S "$src" -B "$src/build" -G "NMake Makefiles" -DPG_CONFIG="$cfg.exe" -DAPACHE_ONLY=ON \
+                -DREGRESS_CHECKS=OFF -DTAP_CHECKS=OFF -DWARNINGS_AS_ERRORS=OFF -DSEND_TELEMETRY_DEFAULT=OFF \
+                -DUSE_OPENSSL=OFF -DCMAKE_BUILD_TYPE=Release
+              cmake --build "$src/build"
+              cmake --install "$src/build"
+            elif [ "$RUNNER_OS" = Windows ] && [ -f "$src/Makefile.win" ]; then
               # Makefile.win installs straight into PGROOT. "-" options: Git Bash
               # would rewrite "/F" into a path.
               (cd "$src" && PGROOT="$(cygpath -w "$root")" nmake -NOLOGO -f Makefile.win clean all install)
+            elif [ "$RUNNER_OS" = Windows ]; then
+              scripts/build-ext-windows.sh "$src" "$root"
             elif [ "$build" = cmake ]; then
               # theseus' pg_config names its CI's Xcode SDK; cmake reads it raw, so
               # front it with one that names this runner's SDK.

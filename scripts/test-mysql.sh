@@ -4,6 +4,7 @@
 set -euo pipefail
 tarball=$(cd "$(dirname "$1")" && pwd)/$(basename "$1")
 dir=$(mktemp -d)
+command -v cygpath >/dev/null && dir=$(cygpath -m "$dir") # native mysqld on Windows
 tar xzf "$tarball" -C "$dir"
 my=$(echo "$dir"/mysql-*)
 sock=/tmp/byre-mysql-test.sock # macOS caps socket paths at 104 chars

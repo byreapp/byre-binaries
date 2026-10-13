@@ -55,9 +55,10 @@ case "$(uname -s)" in
     if [ "$major" -ge 16 ]; then
       export PKG_CONFIG="$deps/tools/pkgconf/pkgconf.exe"
       export PKG_CONFIG_PATH="$deps/lib/pkgconfig;$deps/share/pkgconfig"
+      # PERL: 19's meson otherwise picks Git's MSYS perl, which mangles dumpbin's /nologo.
       meson setup build . --prefix "$(cygpath -m "$prefix")" --buildtype release \
         -Dauto_features=disabled -Dssl=openssl -Dicu=enabled -Dlz4=enabled -Dzlib=enabled \
-        -Dreadline=disabled -Dextra_include_dirs="$deps/include" -Dextra_lib_dirs="$deps/lib"
+        -Dreadline=disabled -DPERL=C:/Strawberry/perl/bin/perl.exe -Dextra_include_dirs="$deps/include" -Dextra_lib_dirs="$deps/lib"
       meson compile -C build
       meson install -C build
     else

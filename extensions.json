@@ -56,7 +56,8 @@
         "macos-arm64",
         "macos-x64",
         "linux-x64",
-        "linux-arm64"
+        "linux-arm64",
+        "windows-x64"
       ]
     },
     {
@@ -74,7 +75,8 @@
         "macos-arm64",
         "macos-x64",
         "linux-x64",
-        "linux-arm64"
+        "linux-arm64",
+        "windows-x64"
       ]
     },
     {
@@ -92,7 +94,8 @@
         "macos-arm64",
         "macos-x64",
         "linux-x64",
-        "linux-arm64"
+        "linux-arm64",
+        "windows-x64"
       ]
     },
     {
@@ -110,7 +113,8 @@
         "macos-arm64",
         "macos-x64",
         "linux-x64",
-        "linux-arm64"
+        "linux-arm64",
+        "windows-x64"
       ]
     },
     {
@@ -127,7 +131,8 @@
         "macos-arm64",
         "macos-x64",
         "linux-x64",
-        "linux-arm64"
+        "linux-arm64",
+        "windows-x64"
       ]
     },
     {
@@ -135,7 +140,8 @@
       "version": "2.30.2",
       "source": "https://github.com/timescale/timescaledb",
       "build": "cmake",
-      "majors": ["16",
+      "majors": [
+        "16",
         "17",
         "18"
       ],
@@ -143,7 +149,8 @@
         "macos-arm64",
         "macos-x64",
         "linux-x64",
-        "linux-arm64"
+        "linux-arm64",
+        "windows-x64"
       ]
     }
   ]
