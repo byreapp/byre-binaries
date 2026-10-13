@@ -5,7 +5,7 @@
 # relocate-*.sh) and bundled WolfSSL on Windows: with WolfSSL, the client
 # library wants GnuTLS everywhere but Windows (Schannel). Storage engines and
 # plugins that pull in extra deps (RocksDB, Mroonga, ColumnStore, Spider,
-# CONNECT, S3, Galera, GSSAPI, HashiCorp) are left out.
+# CONNECT, S3, Galera, GSSAPI, HashiCorp, PAM) are left out.
 set -euo pipefail
 version=$1 prefix=$2
 here=$(cd "$(dirname "$0")" && pwd)
@@ -24,7 +24,7 @@ opts=(
   -DWITH_UNIT_TESTS=OFF -DINSTALL_MYSQLTESTDIR= -DINSTALL_SQLBENCHDIR= -DWITH_EMBEDDED_SERVER=OFF
   -DWITH_WSREP=OFF -DPLUGIN_ROCKSDB=NO -DPLUGIN_MROONGA=NO -DPLUGIN_COLUMNSTORE=NO
   -DPLUGIN_SPIDER=NO -DPLUGIN_CONNECT=NO -DPLUGIN_S3=NO -DPLUGIN_AUTH_GSSAPI=NO
-  -DPLUGIN_AUTH_GSSAPI_CLIENT=OFF -DPLUGIN_HASHICORP_KEY_MANAGEMENT=NO -DPLUGIN_OQGRAPH=NO -DPLUGIN_DUCKDB=NO
+  -DPLUGIN_AUTH_GSSAPI_CLIENT=OFF -DPLUGIN_HASHICORP_KEY_MANAGEMENT=NO -DPLUGIN_OQGRAPH=NO -DPLUGIN_DUCKDB=NO -DPLUGIN_AUTH_PAM=NO
 )
 case "$(uname -s)" in
   Darwin)
