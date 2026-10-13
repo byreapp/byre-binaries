@@ -24,10 +24,24 @@ on:
 permissions:
   contents: write
 
+# Build targets. plan.sh drops the ones already published, so a re-run only
+# builds what's missing.
+# 22.04 = older glibc, so the binaries run on more distros.
+env:
+  TARGETS: >-
+    [
+     {"os": "macos-latest", "platform": "macos-arm64", "triple": "aarch64-apple-darwin"},
+     {"os": "macos-15-intel", "platform": "macos-x64", "triple": "x86_64-apple-darwin"},
+     {"os": "ubuntu-22.04", "platform": "linux-x64", "triple": "x86_64-unknown-linux-gnu"},
+     {"os": "ubuntu-22.04-arm", "platform": "linux-arm64", "triple": "aarch64-unknown-linux-gnu"},
+     {"os": "windows-latest", "platform": "windows-x64", "triple": "x86_64-pc-windows-msvc"}
+    ]
+
 jobs:
   plan:
     runs-on: ubuntu-latest
     outputs:
+      builds: ${{ steps.p.outputs.builds }}
       versions: ${{ steps.p.outputs.versions }}
     steps:
       - uses: actions/checkout@v7
@@ -35,22 +49,18 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ inputs.version }}
-        run: echo "versions=$(scripts/plan.sh postgres "$VERSION")" >> "$GITHUB_OUTPUT"
+        run: |
+          b=$(scripts/plan.sh postgres "$VERSION" "$TARGETS")
+          echo "builds=$b" >> "$GITHUB_OUTPUT"
+          echo "versions=$(jq -c '[.[].version] | unique' <<<"$b")" >> "$GITHUB_OUTPUT"
 
   build:
     needs: plan
-    if: needs.plan.outputs.versions != '[]'
+    if: needs.plan.outputs.builds != '[]'
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJSON(needs.plan.outputs.versions) }}
-        target:
-          - { os: macos-latest, platform: macos-arm64, triple: aarch64-apple-darwin }
-          - { os: macos-15-intel, platform: macos-x64, triple: x86_64-apple-darwin }
-          # 22.04 = older glibc, so the binaries run on more distros.
-          - { os: ubuntu-22.04, platform: linux-x64, triple: x86_64-unknown-linux-gnu }
-          - { os: ubuntu-22.04-arm, platform: linux-arm64, triple: aarch64-unknown-linux-gnu }
-          - { os: windows-latest, platform: windows-x64, triple: x86_64-pc-windows-msvc }
+        include: ${{ fromJSON(needs.plan.outputs.builds) }}
     runs-on: ${{ matrix.target.os }}
     env:
       NAME: postgres-${{ matrix.version }}-${{ matrix.target.triple }}

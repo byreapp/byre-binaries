@@ -261,8 +261,9 @@ uses `GITHUB_TOKEN` (`contents: write`) and needs no secrets.
 | Postgres mirror | none (mirrors every numeric `postgres.versions` entry that isn't mirrored yet) |
 | Extensions | `name`: `all` or an extension name from `extensions.json` |
 
-- **`all`** builds only what isn't fully published. For the from-source
-  workflows, that is any version still missing a platform tarball.
+- **`all`** builds only what isn't published yet. For the from-source
+  workflows, that's per platform: a version missing only its macOS tarball
+  runs just the macOS build.
 - **A specific version** rebuilds just that version and replaces its assets.
 - **A failing platform** doesn't stop the others from publishing.
 
@@ -307,7 +308,7 @@ If an official download goes away, point the download URL in the matching
 - `versions.json`: the engines, versions and platforms to build.
 - `extensions.json`: the Postgres extensions to build. Keep it in sync with
   byre's `catalog.json`.
-- `scripts/plan.sh`: picks which versions to build, skipping fully published ones.
+- `scripts/plan.sh`: picks which (version, platform) builds to run, skipping published ones.
 - `scripts/build-*.sh` and `scripts/test-*.sh`: the build and smoke test for each engine.
 - `scripts/relocate-macos.sh` and `scripts/relocate-linux.sh`: bundle
   libraries, fix rpaths, and fail on leaked absolute paths.

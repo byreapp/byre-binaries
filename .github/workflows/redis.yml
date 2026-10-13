@@ -23,11 +23,24 @@ on:
 permissions:
   contents: write
 
+# Build targets. plan.sh drops the ones already published, so a re-run only
+# builds what's missing.
+env:
+  TARGETS: >-
+    [
+     {"os": "macos-latest", "platform": "macos-arm64", "triple": "aarch64-apple-darwin", "shell": "bash"},
+     {"os": "macos-15-intel", "platform": "macos-x64", "triple": "x86_64-apple-darwin", "shell": "bash"},
+     {"os": "ubuntu-22.04", "platform": "linux-x64", "triple": "x86_64-unknown-linux-gnu", "shell": "bash"},
+     {"os": "ubuntu-22.04-arm", "platform": "linux-arm64", "triple": "aarch64-unknown-linux-gnu", "shell": "bash"},
+     {"os": "windows-latest", "platform": "windows-x64", "triple": "x86_64-pc-windows-msvc", "shell": "msys2 {0}"}
+    ]
+
 jobs:
   plan:
     runs-on: ubuntu-latest
     outputs:
       builds: ${{ steps.p.outputs.builds }}
+      publish: ${{ steps.p.outputs.publish }}
     steps:
       - uses: actions/checkout@v7
       - id: p
@@ -40,10 +53,11 @@ jobs:
           builds='[]'
           for e in redis valkey; do
             [ "$ENGINE" = all ] || [ "$ENGINE" = "$e" ] || continue
-            vs=$(scripts/plan.sh "$e" "$VERSION")
-            builds=$(jq -c --arg e "$e" --argjson vs "$vs" '. + [$vs[] | {engine: $e, version: .}]' <<<"$builds")
+            bs=$(scripts/plan.sh "$e" "$VERSION" "$TARGETS")
+            builds=$(jq -c --arg e "$e" --argjson bs "$bs" '. + [$bs[] | {build: {engine: $e, version}, target}]' <<<"$builds")
           done
           echo "builds=$builds" >> "$GITHUB_OUTPUT"
+          echo "publish=$(jq -c '[.[].build] | unique' <<<"$builds")" >> "$GITHUB_OUTPUT"
 
   build:
     needs: plan
@@ -51,13 +65,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build: ${{ fromJSON(needs.plan.outputs.builds) }}
-        target:
-          - { os: macos-latest, platform: macos-arm64, triple: aarch64-apple-darwin, shell: bash }
-          - { os: macos-15-intel, platform: macos-x64, triple: x86_64-apple-darwin, shell: bash }
-          - { os: ubuntu-22.04, platform: linux-x64, triple: x86_64-unknown-linux-gnu, shell: bash }
-          - { os: ubuntu-22.04-arm, platform: linux-arm64, triple: aarch64-unknown-linux-gnu, shell: bash }
-          - { os: windows-latest, platform: windows-x64, triple: x86_64-pc-windows-msvc, shell: "msys2 {0}" }
+        include: ${{ fromJSON(needs.plan.outputs.builds) }}
     runs-on: ${{ matrix.target.os }}
     defaults:
       run:
@@ -93,7 +101,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build: ${{ fromJSON(needs.plan.outputs.builds) }}
+        build: ${{ fromJSON(needs.plan.outputs.publish) }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
