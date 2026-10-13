@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Rewrites the build-status tables in README.md (between the status markers)
-from versions.json, extensions.json and the repo's published release assets.
+from versions.json, extensions.json and the repo's published release assets,
+and the extensions + Postgres versions in catalog.json — the live catalog the
+Byre app fetches, so only what's actually published shows up in the app.
   ✅ published (links to the tarball)   ❌ planned, not published   — not built for it
 Needs `gh` (GH_TOKEN) and GITHUB_REPOSITORY (default byreapp/byre-binaries)."""
-import json, os, re, subprocess
+import datetime, json, os, re, subprocess
 
 REPO = os.environ.get("GITHUB_REPOSITORY", "byreapp/byre-binaries")
 PLATFORMS = {
@@ -80,3 +82,48 @@ new = re.sub(r"(<!-- status:start -->\n).*?(<!-- status:end -->)",
              lambda m: m[1] + "\n".join(out) + "\n" + m[2], readme, flags=re.S)
 assert new != readme or "<!-- status:start -->" in readme, "status markers missing from README.md"
 open("README.md", "w").write(new)
+
+
+# --- catalog.json (the app's live catalog; engines other than Postgres are hand-edited)
+cat = json.load(open("catalog.json"))
+before = json.dumps({k: v for k, v in cat.items() if k != "updated"}, sort_keys=True)
+old = {e["name"]: e for e in cat["extensions"]}
+live = []
+for e in exts["extensions"]:
+    n, v = e["name"], e["version"]
+    tag = f"ext-{n}-{v}"
+    have = {(m, p) for m in e["majors"] for p in PLATFORMS if f"{n}-{v}-pg{m}-{p}.tar.gz" in assets.get(tag, {})}
+    prev = old.get(n, {})
+    if not have:  # this version isn't published yet: keep serving the previous one
+        live += [prev] if prev else []
+        continue
+    majors = [m for m in e["majors"] if any((m, p) in have for p in PLATFORMS)]
+    plats = [p for p in PLATFORMS if any((m, p) in have for m in majors)]
+    entry = {"name": n, "title": prev.get("title", n), "version": v,
+             "description": prev.get("description", ""), "source": e["source"]}
+    if prev.get("preload"):
+        entry["preload"] = True
+    entry |= {"url": f"https://github.com/{REPO}/releases/download/{tag}/{n}-{v}-pg{{major}}-{{platform}}.tar.gz",
+              "majors": majors, "platforms": plats}
+    skip = [f"pg{m}-{p}" for m in majors for p in plats if (m, p) not in have]
+    if skip:
+        entry["skip"] = skip
+    live.append(entry)
+cat["extensions"] = live
+
+# Postgres: the app downloads theseus directly; the mirror holds the same tags,
+# so a published pg-<exact> release means that version is out.
+pg = next(e for e in cat["engines"] if e["id"] == "postgres")
+for m in exts["postgres"]:
+    if not any(n.endswith(".tar.gz") for n in assets.get(f"pg-{m['exact']}", {})):
+        continue
+    cur = next((x for x in pg["versions"] if x["major"] == m["major"] and not x.get("beta")), None)
+    if cur:
+        cur["exact"] = m["exact"]
+    else:
+        pg["versions"].append({"major": m["major"], "exact": m["exact"]})
+pg["versions"].sort(key=lambda x: int(x["major"]), reverse=True)
+
+if json.dumps({k: v for k, v in cat.items() if k != "updated"}, sort_keys=True) != before or "updated" not in cat:
+    cat = {"updated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), **{k: v for k, v in cat.items() if k != "updated"}}
+    open("catalog.json", "w").write(json.dumps(cat, indent=2, ensure_ascii=False) + "\n")

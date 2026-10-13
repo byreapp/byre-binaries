@@ -1,5 +1,6 @@
-# Refreshes the build-status tables in README.md (scripts/readme-status.py)
-# after any build workflow finishes, and on demand.
+# Refreshes the build-status tables in README.md and the app's live catalog.json
+# (scripts/readme-status.py) after any build workflow finishes, and on demand.
+# The Byre app fetches catalog.json from main, so new releases need no app update.
 name: README status
 
 on:
@@ -25,8 +26,8 @@ jobs:
         run: |
           set -euo pipefail
           scripts/readme-status.py
-          git diff --quiet README.md && exit 0
+          git diff --quiet README.md catalog.json && exit 0
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -qm "README: refresh build status" README.md
+          git commit -qm "Refresh build status and catalog" README.md catalog.json
           git pull -q --rebase && git push -q

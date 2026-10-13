@@ -1,0 +1,304 @@
+{
+  "updated": "2026-10-13T05:47:46Z",
+  "engines": [
+    {
+      "id": "postgres",
+      "name": "PostgreSQL",
+      "versions": [
+        {
+          "major": "19",
+          "exact": "19.0.0-beta4",
+          "beta": true,
+          "url": {
+            "macos-arm64": "https://github.com/PostgresApp/PostgresApp/releases/download/v3alpha10/Postgres-3alpha10-19.dmg",
+            "macos-x64": "https://github.com/PostgresApp/PostgresApp/releases/download/v3alpha10/Postgres-3alpha10-19.dmg"
+          }
+        },
+        {
+          "major": "18",
+          "exact": "18.6.0"
+        },
+        {
+          "major": "17",
+          "exact": "17.11.0"
+        },
+        {
+          "major": "16",
+          "exact": "16.15.0"
+        },
+        {
+          "major": "15",
+          "exact": "15.19.0"
+        },
+        {
+          "major": "14",
+          "exact": "14.24.0"
+        }
+      ]
+    },
+    {
+      "id": "mysql",
+      "name": "MySQL",
+      "versions": [
+        {
+          "major": "26.7",
+          "exact": "26.7.0",
+          "url": {
+            "macos-arm64": "https://cdn.mysql.com/Downloads/MySQL-26.7/mysql-26.7.0-macos15-arm64.tar.gz",
+            "macos-x64": "https://cdn.mysql.com/Downloads/MySQL-26.7/mysql-26.7.0-macos15-x86_64.tar.gz",
+            "linux-arm64": "https://cdn.mysql.com/Downloads/MySQL-26.7/mysql-26.7.0-linux-glibc2.28-aarch64.tar.xz",
+            "linux-x64": "https://cdn.mysql.com/Downloads/MySQL-26.7/mysql-26.7.0-linux-glibc2.28-x86_64.tar.xz",
+            "windows-x64": "https://cdn.mysql.com/Downloads/MySQL-26.7/mysql-26.7.0-winx64.zip"
+          }
+        },
+        {
+          "major": "9.7",
+          "exact": "9.7.2",
+          "url": {
+            "macos-arm64": "https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.2-macos15-arm64.tar.gz",
+            "macos-x64": "https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.2-macos15-x86_64.tar.gz",
+            "linux-arm64": "https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.2-linux-glibc2.28-aarch64.tar.xz",
+            "linux-x64": "https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.2-linux-glibc2.28-x86_64.tar.xz",
+            "windows-x64": "https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.2-winx64.zip"
+          }
+        },
+        {
+          "major": "9.5",
+          "exact": "9.5.0",
+          "url": {
+            "macos-arm64": "https://cdn.mysql.com/Downloads/MySQL-9.5/mysql-9.5.0-macos15-arm64.tar.gz",
+            "macos-x64": "https://cdn.mysql.com/Downloads/MySQL-9.5/mysql-9.5.0-macos15-x86_64.tar.gz",
+            "linux-arm64": "https://cdn.mysql.com/Downloads/MySQL-9.5/mysql-9.5.0-linux-glibc2.28-aarch64.tar.xz",
+            "linux-x64": "https://cdn.mysql.com/Downloads/MySQL-9.5/mysql-9.5.0-linux-glibc2.28-x86_64.tar.xz",
+            "windows-x64": "https://cdn.mysql.com/Downloads/MySQL-9.5/mysql-9.5.0-winx64.zip"
+          }
+        },
+        {
+          "major": "8.4",
+          "exact": "8.4.11",
+          "url": {
+            "macos-arm64": "https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-8.4.11-macos15-arm64.tar.gz",
+            "macos-x64": "https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-8.4.11-macos15-x86_64.tar.gz",
+            "linux-arm64": "https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-8.4.11-linux-glibc2.28-aarch64.tar.xz",
+            "linux-x64": "https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-8.4.11-linux-glibc2.28-x86_64.tar.xz",
+            "windows-x64": "https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-8.4.11-winx64.zip"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mongodb",
+      "name": "MongoDB",
+      "versions": [
+        {
+          "major": "9.0",
+          "exact": "9.0.2",
+          "url": {
+            "macos-arm64": "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-9.0.2.tgz",
+            "macos-x64": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-9.0.2.tgz",
+            "linux-x64": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-9.0.2.tgz",
+            "linux-arm64": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-9.0.2.tgz",
+            "windows-x64": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-9.0.2.zip"
+          }
+        },
+        {
+          "major": "8.0",
+          "exact": "8.0.32",
+          "url": {
+            "macos-arm64": "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-8.0.32.tgz",
+            "macos-x64": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-8.0.32.tgz",
+            "linux-x64": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-8.0.32.tgz",
+            "linux-arm64": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-8.0.32.tgz",
+            "windows-x64": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-8.0.32.zip"
+          }
+        },
+        {
+          "major": "7.0",
+          "exact": "7.0.43",
+          "url": {
+            "macos-arm64": "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-7.0.43.tgz",
+            "macos-x64": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-7.0.43.tgz",
+            "linux-x64": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-7.0.43.tgz",
+            "linux-arm64": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-7.0.43.tgz",
+            "windows-x64": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-7.0.43.zip"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mongodb-tools",
+      "name": "MongoDB Database Tools",
+      "versions": [
+        {
+          "major": "100",
+          "exact": "100.19.1",
+          "url": {
+            "macos-arm64": "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-macos-arm64-100.19.1.zip",
+            "macos-x64": "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-macos-x86_64-100.19.1.zip",
+            "linux-x64": "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2204-x86_64-100.19.1.tgz",
+            "linux-arm64": "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2204-arm64-100.19.1.tgz",
+            "windows-x64": "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-windows-x86_64-100.19.1.zip"
+          }
+        }
+      ]
+    }
+  ],
+  "extensions": [
+    {
+      "name": "vector",
+      "title": "pgvector",
+      "version": "0.8.7",
+      "description": "Vector similarity search (embeddings, HNSW / IVFFlat indexes)",
+      "source": "https://github.com/pgvector/pgvector",
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-vector-0.8.7/vector-0.8.7-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "hypopg",
+      "title": "HypoPG",
+      "version": "1.4.3",
+      "description": "Hypothetical indexes: see if an index would help before building it",
+      "source": "https://github.com/HypoPG/hypopg",
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-hypopg-1.4.3/hypopg-1.4.3-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "pg_cron",
+      "title": "pg_cron",
+      "version": "1.6.8",
+      "description": "Cron-style job scheduler inside Postgres (enable in the postgres database)",
+      "source": "https://github.com/citusdata/pg_cron",
+      "preload": true,
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-pg_cron-1.6.8/pg_cron-1.6.8-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "pg_ivm",
+      "title": "pg_ivm",
+      "version": "1.16",
+      "description": "Incrementally maintained materialized views",
+      "source": "https://github.com/sraoss/pg_ivm",
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-pg_ivm-1.16/pg_ivm-1.16-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ],
+      "skip": [
+        "pg14-windows-x64"
+      ]
+    },
+    {
+      "name": "pg_partman",
+      "title": "pg_partman",
+      "version": "5.5.0",
+      "description": "Automatic time / serial table partition management",
+      "source": "https://github.com/pgpartman/pg_partman",
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-pg_partman-5.5.0/pg_partman-5.5.0-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "pg_uuidv7",
+      "title": "pg_uuidv7",
+      "version": "1.7.0",
+      "description": "uuid_generate_v7() — time-ordered UUIDs (built into PostgreSQL 18)",
+      "source": "https://github.com/fboulnois/pg_uuidv7",
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-pg_uuidv7-1.7.0/pg_uuidv7-1.7.0-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "timescaledb",
+      "title": "TimescaleDB",
+      "version": "2.30.2",
+      "description": "Time-series hypertables and continuous aggregates (Apache-2 edition)",
+      "source": "https://github.com/timescale/timescaledb",
+      "preload": true,
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.30.2/timescaledb-2.30.2-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "16",
+        "17",
+        "18"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    }
+  ]
+}
