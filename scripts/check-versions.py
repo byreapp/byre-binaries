@@ -4,7 +4,7 @@
     <engine> <version> line    a newer GA release line than any we ship
 Versions come from each vendor's own release feed (GA only, no RCs/previews).
 Run: python3 scripts/check-versions.py   (python3 ... --self-test checks the logic offline)"""
-import json, re, subprocess, sys, urllib.request
+import json, os, re, subprocess, sys, urllib.request
 
 
 def get(url):
@@ -89,7 +89,18 @@ if __name__ == "__main__":
     if sys.argv[1:] == ["--self-test"]:
         sys.exit(self_test())
     versions = json.load(open("versions.json"))
+    rows = ["| Engine | We ship | Vendor latest | Missing |", "|---|---|---|---|"]
     for engine, (fetch, n, confirm) in UPSTREAM.items():
-        for v, kind in missing(versions[engine]["versions"], fetch(), n):
-            if confirm is None or confirm(v):
-                print(engine, v, kind)
+        theirs = fetch()
+        ok = confirm or (lambda v: True)
+        new = [(v, kind) for v, kind in missing(versions[engine]["versions"], theirs, n) if ok(v)]
+        for v, kind in new:
+            print(engine, v, kind)
+        latest = next((v for v in sorted(theirs, key=key, reverse=True) if ok(v)), "?")
+        rows.append(f"| {engine} | {', '.join(versions[engine]['versions'])} | {latest} | {', '.join(f'🆕 {v} ({kind})' for v, kind in new) or '✅ none'} |")
+    # The Actions run page shows this markdown as the job summary.
+    if os.environ.get("GITHUB_STEP_SUMMARY"):
+        with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
+            f.write("### Vendor versions\n\n" + "\n".join(rows) + "\n")
+    else:
+        print("\n".join(rows), file=sys.stderr)
