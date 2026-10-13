@@ -30,7 +30,7 @@ jobs:
     outputs:
       versions: ${{ steps.p.outputs.versions }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - id: p
         env:
           GH_TOKEN: ${{ github.token }}
@@ -58,18 +58,24 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Linux deps
         if: runner.os == 'Linux'
         run: sudo apt-get update -q && sudo apt-get install -yq libicu-dev libssl-dev liblz4-dev zlib1g-dev uuid-dev libedit-dev patchelf pkg-config
       # vcpkg builds icu/openssl from source (~20 min); its binary cache makes reruns fast.
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         if: runner.os == 'Windows'
         with:
           path: ${{ runner.temp }}/vcpkg-cache
           key: vcpkg-postgres-v1
-      - uses: ilammy/msvc-dev-cmd@v1
+      # MSVC dev env (vcvars64) for later steps; replaces ilammy/msvc-dev-cmd,
+      # which still runs on Node 20.
+      - name: MSVC env
         if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          for /f "usebackq delims=" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do call "%%i\VC\Auxiliary\Build\vcvars64.bat"
+          set >> "%GITHUB_ENV%"
       - name: Windows deps
         if: runner.os == 'Windows'
         env:
@@ -89,7 +95,7 @@ jobs:
         run: mkdir -p dist && tar czf "dist/$NAME.tar.gz" -C out "$NAME"
       - name: Smoke test
         run: scripts/test-postgres.sh "dist/$NAME.tar.gz"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ env.NAME }}
           path: dist/*.tar.gz
@@ -105,8 +111,8 @@ jobs:
         version: ${{ fromJSON(needs.plan.outputs.versions) }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
         with:
           pattern: postgres-${{ matrix.version }}-*
           path: dist

@@ -31,7 +31,7 @@ jobs:
     outputs:
       exts: ${{ steps.p.outputs.exts }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - id: p
         env:
           GH_TOKEN: ${{ github.token }}
@@ -67,16 +67,22 @@ jobs:
     runs-on: ${{ matrix.target.os }}
     env:
       EXT: ${{ matrix.ext }}
-      # Not PLATFORM: msvc-dev-cmd sets that to "x64" on Windows.
+      # Not PLATFORM: vcvars sets that to "x64" on Windows.
       BYRE_PLATFORM: ${{ matrix.target.platform }}
       TRIPLE: ${{ matrix.target.triple }}
     defaults:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
-      - uses: ilammy/msvc-dev-cmd@v1
+      - uses: actions/checkout@v7
+      # MSVC dev env (vcvars64) for later steps; replaces ilammy/msvc-dev-cmd,
+      # which still runs on Node 20.
+      - name: MSVC env
         if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          for /f "usebackq delims=" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do call "%%i\VC\Auxiliary\Build\vcvars64.bat"
+          set >> "%GITHUB_ENV%"
       - if: runner.os == 'Windows'
         run: |
           choco install make -y --no-progress # reads PGXS Makefiles (build-ext-windows.sh)
@@ -164,7 +170,7 @@ jobs:
             tar czf "dist/$EXT-$ver-pg$m-$BYRE_PLATFORM.tar.gz" -C out lib share
           done
           ls -l dist
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.ext }}-${{ matrix.target.platform }}
           path: dist/*.tar.gz
@@ -180,8 +186,8 @@ jobs:
         ext: ${{ fromJSON(needs.plan.outputs.exts) }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
         with:
           pattern: ${{ matrix.ext }}-*
           path: dist

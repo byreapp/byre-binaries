@@ -32,7 +32,7 @@ jobs:
       VERSION: ${{ inputs.version }}
       NAME: mongodb-${{ inputs.version }}-x86_64-unknown-linux-gnu
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Check version
         env:
           GH_TOKEN: ${{ github.token }}
@@ -44,7 +44,7 @@ jobs:
           df -h /
       # 8.0+ (Bazel) needs Python 3.13 for its build scripts; 7.0 SCons uses the runner's.
       - if: ${{ !startsWith(inputs.version, '7.') }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.13"
       - name: Build

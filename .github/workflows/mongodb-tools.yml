@@ -23,13 +23,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - id: p
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ inputs.version }}
         run: echo "versions=$(scripts/plan.sh mongodb-tools "$VERSION" | jq -r 'join(" ")')" >> "$GITHUB_OUTPUT"
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         if: steps.p.outputs.versions != ''
         with:
           go-version: stable

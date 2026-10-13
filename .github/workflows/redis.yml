@@ -29,7 +29,7 @@ jobs:
     outputs:
       builds: ${{ steps.p.outputs.builds }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - id: p
         env:
           GH_TOKEN: ${{ github.token }}
@@ -67,7 +67,7 @@ jobs:
       VERSION: ${{ matrix.build.version }}
       NAME: ${{ matrix.build.engine }}-${{ matrix.build.version }}-${{ matrix.target.triple }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - if: runner.os == 'Linux'
         run: sudo apt-get install -yq patchelf
       - uses: msys2/setup-msys2@v2
@@ -81,7 +81,7 @@ jobs:
         run: mkdir -p dist && tar czf "dist/$NAME.tar.gz" -C out "$NAME"
       - name: Smoke test
         run: scripts/test-redis.sh "$ENGINE" "dist/$NAME.tar.gz"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ env.NAME }}
           path: dist/*.tar.gz
@@ -96,8 +96,8 @@ jobs:
         build: ${{ fromJSON(needs.plan.outputs.builds) }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
         with:
           pattern: ${{ matrix.build.engine }}-${{ matrix.build.version }}-*
           path: dist
