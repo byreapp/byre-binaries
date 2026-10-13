@@ -31,6 +31,22 @@
       "windows-x64"
     ]
   },
+  "mariadb": {
+    "versions": [
+      "13.0.2",
+      "12.3.3",
+      "11.8.9",
+      "11.4.13",
+      "10.11.19"
+    ],
+    "platforms": [
+      "macos-arm64",
+      "macos-x64",
+      "linux-x64",
+      "linux-arm64",
+      "windows-x64"
+    ]
+  },
   "redis": {
     "versions": [
       "8.10.2"

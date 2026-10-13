@@ -15,7 +15,7 @@ source. The one exception is the Postgres mirror, which copies the
 downloads today.
 
 Byre downloads its Postgres extensions (`ext-*`) from here. **The from-source
-server builds** (`postgres-*`, `mysql-*`, `redis-*`, `valkey-*`, `mongodb-*`,
+server builds** (`postgres-*`, `mysql-*`, `mariadb-*`, `redis-*`, `valkey-*`, `mongodb-*`,
 `mongodb-tools-*`) **aren't used by the app yet.**
 
 The app itself (installers, updater `latest.json`, changelog, app issues) lives
@@ -30,6 +30,7 @@ holds only the app. Every database binary is published here.
 | `postgres-mirror.yml` | Checksum-verified copy of the theseus-rs Postgres builds Byre downloads | `pg-<version>` |
 | `extensions.yml` | Postgres extensions listed in `extensions.json`, compiled against the theseus build for each major | `ext-<name>-<version>` |
 | `mysql.yml` | MySQL from the cdn.mysql.com source tarball | `mysql-<version>` |
+| `mariadb.yml` | MariaDB from the archive.mariadb.org source tarball | `mariadb-<version>` |
 | `redis.yml` | Redis (download.redis.io) and Valkey (GitHub archive) | `redis-<version>`, `valkey-<version>` |
 | `mongodb.yml` | MongoDB server from the mongodb/mongo `r<version>` tag (manual, needs a larger runner) | `mongodb-<version>` |
 | `mongodb-tools.yml` | MongoDB Database Tools (`mongodump` and the rest), Go cross-compile | `mongodb-tools-<version>` |
@@ -56,6 +57,11 @@ from `versions.json`, `extensions.json` and the published releases by
 <tr><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mysql-9.7.2">9.7.2</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mysql-9.7.2/mysql-9.7.2-aarch64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mysql-9.7.2/mysql-9.7.2-x86_64-apple-darwin.tar.gz">✅</a></td><td>❌</td><td>❌</td><td>❌</td></tr>
 <tr><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mysql-9.5.0">9.5.0</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-aarch64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-x86_64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-x86_64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-aarch64-unknown-linux-gnu.tar.gz">✅</a></td><td>❌</td></tr>
 <tr><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mysql-8.4.11">8.4.11</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mysql-8.4.11/mysql-8.4.11-aarch64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mysql-8.4.11/mysql-8.4.11-x86_64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mysql-8.4.11/mysql-8.4.11-x86_64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mysql-8.4.11/mysql-8.4.11-aarch64-unknown-linux-gnu.tar.gz">✅</a></td><td>❌</td></tr>
+<tr><td rowspan="5">mariadb</td><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mariadb-13.0.2">13.0.2</a></td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mariadb-12.3.3">12.3.3</a></td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mariadb-11.8.9">11.8.9</a></td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mariadb-11.4.13">11.4.13</a></td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mariadb-10.11.19">10.11.19</a></td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
 <tr><td rowspan="1">redis</td><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/redis-8.10.2">8.10.2</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-aarch64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-x86_64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-x86_64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-aarch64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-x86_64-pc-windows-msvc.tar.gz">✅</a></td></tr>
 <tr><td rowspan="1">valkey</td><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/valkey-9.1.2">9.1.2</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-aarch64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-x86_64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-x86_64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-aarch64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-x86_64-pc-windows-msvc.tar.gz">✅</a></td></tr>
 <tr><td rowspan="3">mongodb</td><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mongodb-9.1.0-alpha0">9.1.0-alpha0</a></td><td>—</td><td>—</td><td>❌</td><td>—</td><td>—</td></tr>
@@ -205,6 +211,17 @@ doesn't export there.
   9.x's optional OCI/telemetry parts use it).
 - **Smoke test:** `mysqld --initialize-insecure`, start the server, then `select version()`.
 
+### MariaDB
+
+- **Build:** CMake with Ninja.
+- **Libraries:** all bundled from MariaDB's source tree: WolfSSL (TLS), PCRE2,
+  zlib and fmt. No system OpenSSL on any platform.
+- **Turned off:** Galera (WSREP), the embedded server, unit tests, and the
+  plugins that need extra deps: RocksDB, Mroonga, ColumnStore, Spider,
+  CONNECT, S3, OQGraph, GSSAPI and HashiCorp key management.
+- **Windows:** MSVC with Ninja, winflexbison for the parser.
+- **Smoke test:** `mariadb-install-db`, start `mariadbd`, then `select version()`.
+
 ### Redis and Valkey
 
 - **Build:** core server only (`make -C src`).
@@ -236,7 +253,7 @@ uses `GITHUB_TOKEN` (`contents: write`) and needs no secrets.
 
 | Workflow | Inputs |
 |---|---|
-| Postgres, MySQL | `version`: `all` (default) or a version from `versions.json` |
+| Postgres, MySQL, MariaDB | `version`: `all` (default) or a version from `versions.json` |
 | Redis + Valkey | `engine`: `all`, `redis` or `valkey`; `version`: `all` or a version |
 | MongoDB tools | `version`: `all` or a version |
 | MongoDB | `version` (required); `runner`: a larger-runner label |
@@ -273,6 +290,7 @@ goes away:
 
 - [postgres](https://github.com/byreapp/postgres)
 - [mysql-server](https://github.com/byreapp/mysql-server)
+- [mariadb-server](https://github.com/byreapp/mariadb-server)
 - [mongo](https://github.com/byreapp/mongo)
 - [mongo-tools](https://github.com/byreapp/mongo-tools)
 - [redis](https://github.com/byreapp/redis)
