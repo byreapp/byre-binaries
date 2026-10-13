@@ -14,7 +14,6 @@ PLATFORMS = {
     "windows-x64": "x86_64-pc-windows-msvc",
 }
 HEAD = "| " + " | ".join(PLATFORMS) + " |"
-RULE = "|---|---|" + "---|" * len(PLATFORMS)
 
 pages = subprocess.run(
     ["gh", "api", f"repos/{REPO}/releases", "--paginate", "--jq", ".[] | {tag_name, assets: [.assets[] | {name, browser_download_url}]}"],
@@ -30,19 +29,34 @@ def cell(tag, name, wanted):
     if not wanted:
         return "—"
     url = assets.get(tag, {}).get(name)
-    return f"[✅]({url})" if url else "❌"
+    return f'<a href="{url}">✅</a>' if url else "❌"
+
+
+def link(tag, text):
+    return f'<a href="https://github.com/{REPO}/releases/tag/{tag}">{text}</a>'
+
+
+def grouped(head, groups):
+    """HTML table (markdown has no rowspan): one cell per group spans its rows.
+    groups: [(label, [[cell, ...], ...])]"""
+    rows = ["<table>", "<tr>" + "".join(f"<th>{h}</th>" for h in head) + "</tr>"]
+    for label, cells in groups:
+        for i, c in enumerate(cells):
+            first = f'<td rowspan="{len(cells)}">{label}</td>' if i == 0 else ""
+            rows.append("<tr>" + first + "".join(f"<td>{x}</td>" for x in c) + "</tr>")
+    return rows + ["</table>"]
 
 
 versions = json.load(open("versions.json"))
 exts = json.load(open("extensions.json"))
 out = []
 
-out += ["#### Database servers (from source)", "", "| Engine | Version " + HEAD, RULE]
-for engine, spec in versions.items():
-    for v in spec["versions"]:
-        tag = f"{engine}-{v}"
-        cells = [cell(tag, f"{tag}-{t}.tar.gz", p in spec["platforms"]) for p, t in PLATFORMS.items()]
-        out.append(f"| {engine} | [{v}](https://github.com/{REPO}/releases/tag/{tag}) | " + " | ".join(cells) + " |")
+out += ["#### Database servers (from source)", ""]
+out += grouped(["Engine", "Version", *PLATFORMS], [
+    (engine, [[link(f"{engine}-{v}", v)] +
+              [cell(f"{engine}-{v}", f"{engine}-{v}-{t}.tar.gz", p in spec["platforms"]) for p, t in PLATFORMS.items()]
+              for v in spec["versions"]])
+    for engine, spec in versions.items()])
 
 out += ["", "#### Postgres mirror (theseus, what Byre downloads)", "", "| Version " + HEAD, "|---|" + "---|" * len(PLATFORMS)]
 for pg in exts["postgres"]:
@@ -50,16 +64,16 @@ for pg in exts["postgres"]:
     cells = [cell(tag, f"postgresql-{pg['exact']}-{t}.tar.gz", True) for t in PLATFORMS.values()]
     out.append(f"| [{pg['exact']}](https://github.com/{REPO}/releases/tag/{tag}) | " + " | ".join(cells) + " |")
 
-out += ["", "#### Postgres extensions", "", "| Extension | Postgres " + HEAD, RULE]
+out += ["", "#### Postgres extensions", ""]
+groups = []
 for e in exts["extensions"]:
     tag = f"ext-{e['name']}-{e['version']}"
-    for m in e["majors"]:
-        cells = [
-            cell(tag, f"{e['name']}-{e['version']}-pg{m}-{p}.tar.gz",
-                 p in e["platforms"] and f"pg{m}-{p}" not in e.get("skip", []))
-            for p in PLATFORMS
-        ]
-        out.append(f"| [{e['name']} {e['version']}](https://github.com/{REPO}/releases/tag/{tag}) | {m} | " + " | ".join(cells) + " |")
+    groups.append((link(tag, f"{e['name']} {e['version']}"), [
+        [m] + [cell(tag, f"{e['name']}-{e['version']}-pg{m}-{p}.tar.gz",
+                    p in e["platforms"] and f"pg{m}-{p}" not in e.get("skip", []))
+               for p in PLATFORMS]
+        for m in e["majors"]]))
+out += grouped(["Extension", "Postgres", *PLATFORMS], groups)
 
 readme = open("README.md").read()
 new = re.sub(r"(<!-- status:start -->\n).*?(<!-- status:end -->)",
