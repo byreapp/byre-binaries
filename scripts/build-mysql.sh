@@ -32,7 +32,10 @@ case "$(uname -s)" in
     # winflexbison on PATH (see mysql.yml). Git's coreutils `link` would shadow MSVC's.
     export PATH="$(cygpath -u "$VCToolsInstallDir")/bin/Hostx64/x64:$PATH"
     opts+=(-DCMAKE_INSTALL_PREFIX="$(cygpath -m "$prefix")" -DWITH_SSL="$(cygpath -m "$VCPKG_INSTALLED")" -DBISON_EXECUTABLE="$(cygpath -m "$(command -v win_bison.exe)")"
-      -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl) ;;
+      -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl)
+    # Install copies openssl.exe into bin; vcpkg keeps it under tools/, else Git's.
+    ossl="$VCPKG_INSTALLED/tools/openssl/openssl.exe"; [ -f "$ossl" ] || ossl=$(command -v openssl.exe)
+    opts+=(-DOPENSSL_EXECUTABLE="$(cygpath -m "$ossl")") ;;
 esac
 cmake -S "$src" -B "$src/build" "${opts[@]}"
 cmake --build "$src/build"
