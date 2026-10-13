@@ -1,7 +1,7 @@
 # Builds MariaDB from the official source tarball (archive.mariadb.org) and
 # publishes each version as a PRERELEASE tagged mariadb-<version>, assets
 # mariadb-<version>-<triple>.tar.gz + .sha256. ~1 h per platform. TLS is
-# MariaDB's bundled WolfSSL, so no OpenSSL on any platform. Not used by Byre yet.
+# system OpenSSL on macOS/Linux, bundled WolfSSL on Windows. Not used by Byre yet.
 #
 # Tarball layout: mariadb-<version>-<triple>/{bin,lib,share,scripts,…} (cmake
 # install), relocatable the same way as MySQL (see scripts/relocate-*.sh).
@@ -60,11 +60,11 @@ jobs:
         run: |
           # The build tree needs ~15 GB; the image ships far less free.
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
-          sudo apt-get update -q && sudo apt-get install -yq libncurses-dev bison ninja-build pkg-config patchelf
+          sudo apt-get update -q && sudo apt-get install -yq libssl-dev libncurses-dev bison ninja-build pkg-config patchelf
       - name: macOS deps
         if: runner.os == 'macOS'
         run: |
-          brew install ninja bison
+          brew install openssl@3 ninja bison
           echo "$(brew --prefix bison)/bin" >> "$GITHUB_PATH" # Apple's bison 2.3 is too old
       - uses: ilammy/msvc-dev-cmd@v1
         if: runner.os == 'Windows'

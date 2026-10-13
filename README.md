@@ -214,11 +214,12 @@ doesn't export there.
 ### MariaDB
 
 - **Build:** CMake with Ninja.
-- **Libraries:** all bundled from MariaDB's source tree: WolfSSL (TLS), PCRE2,
-  zlib and fmt. No system OpenSSL on any platform.
+- **Libraries:** PCRE2, zlib and fmt bundled from MariaDB's source tree.
+  TLS is OpenSSL (system on Linux, Homebrew on macOS, copied into `lib/`) and
+  MariaDB's bundled WolfSSL on Windows.
 - **Turned off:** Galera (WSREP), the embedded server, unit tests, and the
   plugins that need extra deps: RocksDB, Mroonga, ColumnStore, Spider,
-  CONNECT, S3, OQGraph, GSSAPI and HashiCorp key management.
+  CONNECT, S3, OQGraph, DuckDB, GSSAPI and HashiCorp key management.
 - **Windows:** MSVC with Ninja, winflexbison for the parser.
 - **Smoke test:** `mariadb-install-db`, start `mariadbd`, then `select version()`.
 
