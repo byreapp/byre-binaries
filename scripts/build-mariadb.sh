@@ -5,7 +5,7 @@
 # relocate-*.sh) and bundled WolfSSL on Windows: with WolfSSL, the client
 # library wants GnuTLS everywhere but Windows (Schannel). Storage engines and
 # plugins that pull in extra deps (RocksDB, Mroonga, ColumnStore, Spider,
-# CONNECT, S3, Galera, GSSAPI, HashiCorp, PAM) are left out.
+# CONNECT, S3, Galera, GSSAPI, HashiCorp) are left out.
 set -euo pipefail
 version=$1 prefix=$2
 here=$(cd "$(dirname "$0")" && pwd)
@@ -21,10 +21,10 @@ curl -fsSL "https://archive.mariadb.org/mariadb-$version/source/mariadb-$version
 opts=(
   -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX="$prefix"
   -DWITH_PCRE=bundled -DWITH_ZLIB=bundled -DWITH_LIBFMT=bundled
-  -DWITH_UNIT_TESTS=OFF -DINSTALL_MYSQLTESTDIR= -DINSTALL_SQLBENCHDIR= -DWITH_EMBEDDED_SERVER=OFF
+  -DWITH_UNIT_TESTS=OFF -DINSTALL_MYSQLTESTDIR=mariadb-test -DINSTALL_SQLBENCHDIR= -DWITH_EMBEDDED_SERVER=OFF
   -DWITH_WSREP=OFF -DPLUGIN_ROCKSDB=NO -DPLUGIN_MROONGA=NO -DPLUGIN_COLUMNSTORE=NO
   -DPLUGIN_SPIDER=NO -DPLUGIN_CONNECT=NO -DPLUGIN_S3=NO -DPLUGIN_AUTH_GSSAPI=NO
-  -DPLUGIN_AUTH_GSSAPI_CLIENT=OFF -DPLUGIN_HASHICORP_KEY_MANAGEMENT=NO -DPLUGIN_OQGRAPH=NO -DPLUGIN_DUCKDB=NO -DPLUGIN_AUTH_PAM=NO
+  -DPLUGIN_AUTH_GSSAPI_CLIENT=OFF -DPLUGIN_HASHICORP_KEY_MANAGEMENT=NO -DPLUGIN_OQGRAPH=NO -DPLUGIN_DUCKDB=NO
 )
 case "$(uname -s)" in
   Darwin)
@@ -41,6 +41,9 @@ esac
 cmake -S "$src" -B "$src/build" "${opts[@]}"
 cmake --build "$src/build"
 cmake --install "$src/build" --strip
+# An empty INSTALL_MYSQLTESTDIR sends the PAM test module to /suite, so the
+# tests install here and are dropped.
+rm -rf "$prefix/mariadb-test"
 rm -rf "$src" # frees the build tree before packaging
 case "$(uname -s)" in
   Darwin) "$here/relocate-macos.sh" "$prefix" ;;
