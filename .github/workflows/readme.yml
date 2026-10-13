@@ -5,7 +5,7 @@ name: README status
 
 on:
   workflow_run:
-    workflows: [Postgres, Postgres mirror, Extensions, MySQL, MariaDB, Redis + Valkey, MongoDB Tools, "MongoDB (manual, large runner)"]
+    workflows: [Postgres, Postgres mirror, Extensions, MySQL, MariaDB, Redis + Valkey, MongoDB Tools, MongoDB mirror]
     types: [completed]
   workflow_dispatch:
 

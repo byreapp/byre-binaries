@@ -53,7 +53,7 @@ versions = json.load(open("versions.json"))
 exts = json.load(open("extensions.json"))
 out = []
 
-out += ["#### Database servers (from source)", ""]
+out += ["#### Database servers (from source; MongoDB is the official build)", ""]
 out += grouped(["Engine", "Version", *PLATFORMS], [
     (engine, [[link(f"{engine}-{v}", v)] +
               [cell(f"{engine}-{v}", f"{engine}-{v}-{t}.tar.gz", p in spec["platforms"]) for p, t in PLATFORMS.items()]

@@ -14,8 +14,8 @@ source. The one exception is the Postgres mirror, which copies the
 [theseus-rs](https://github.com/theseus-rs/postgresql-binaries) builds Byre
 downloads today.
 
-Byre downloads its Postgres extensions (`ext-*`) from here. **The from-source
-server builds** (`postgres-*`, `mysql-*`, `mariadb-*`, `redis-*`, `valkey-*`, `mongodb-*`,
+Byre downloads its Postgres extensions (`ext-*`) from here. **The server builds**
+(`postgres-*`, `mysql-*`, `mariadb-*`, `redis-*`, `valkey-*`, `mongodb-*`,
 `mongodb-tools-*`) **aren't used by the app yet.**
 
 The app itself (installers, updater `latest.json`, changelog, app issues) lives
@@ -32,7 +32,7 @@ holds only the app. Every database binary is published here.
 | `mysql.yml` | MySQL from the cdn.mysql.com source tarball | `mysql-<version>` |
 | `mariadb.yml` | MariaDB from the archive.mariadb.org source tarball | `mariadb-<version>` |
 | `redis.yml` | Redis (download.redis.io) and Valkey (GitHub archive) | `redis-<version>`, `valkey-<version>` |
-| `mongodb.yml` | MongoDB server from the mongodb/mongo `r<version>` tag (manual, needs a larger runner) | `mongodb-<version>` |
+| `mongodb.yml` | Checksum-verified copy of MongoDB's official Community Server builds | `mongodb-<version>` |
 | `mongodb-tools.yml` | MongoDB Database Tools (`mongodump` and the rest), Go cross-compile | `mongodb-tools-<version>` |
 
 ### Build status
@@ -43,7 +43,7 @@ from `versions.json`, `extensions.json` and the published releases by
 `scripts/readme-status.py` after every build run (`readme.yml`).
 
 <!-- status:start -->
-#### Database servers (from source)
+#### Database servers (from source; MongoDB is the official build)
 
 <table>
 <tr><th>Engine</th><th>Version</th><th>macos-arm64</th><th>macos-x64</th><th>linux-x64</th><th>linux-arm64</th><th>windows-x64</th></tr>
@@ -64,9 +64,9 @@ from `versions.json`, `extensions.json` and the published releases by
 <tr><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mariadb-10.11.19">10.11.19</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-aarch64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-x86_64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-x86_64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-aarch64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-x86_64-pc-windows-msvc.tar.gz">✅</a></td></tr>
 <tr><td rowspan="1">redis</td><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/redis-8.10.2">8.10.2</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-aarch64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-x86_64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-x86_64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-aarch64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-x86_64-pc-windows-msvc.tar.gz">✅</a></td></tr>
 <tr><td rowspan="1">valkey</td><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/valkey-9.1.2">9.1.2</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-aarch64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-x86_64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-x86_64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-aarch64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-x86_64-pc-windows-msvc.tar.gz">✅</a></td></tr>
-<tr><td rowspan="3">mongodb</td><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mongodb-9.1.0-alpha0">9.1.0-alpha0</a></td><td>—</td><td>—</td><td>❌</td><td>—</td><td>—</td></tr>
-<tr><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mongodb-8.0.32">8.0.32</a></td><td>—</td><td>—</td><td>❌</td><td>—</td><td>—</td></tr>
-<tr><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mongodb-7.0.43">7.0.43</a></td><td>—</td><td>—</td><td>❌</td><td>—</td><td>—</td></tr>
+<tr><td rowspan="3">mongodb</td><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mongodb-9.0.2">9.0.2</a></td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mongodb-8.0.32">8.0.32</a></td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mongodb-7.0.43">7.0.43</a></td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
 <tr><td rowspan="1">mongodb-tools</td><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mongodb-tools-100.19.1">100.19.1</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-aarch64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-x86_64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-x86_64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-aarch64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-x86_64-pc-windows-msvc.tar.gz">✅</a></td></tr>
 </table>
 
@@ -235,17 +235,20 @@ doesn't export there.
 
 ### MongoDB
 
-`mongodb.yml` is manual and isn't run routinely.
+The server isn't built from source: that's many hours of Bazel and more disk
+than the free runners have. `mongodb.yml` mirrors MongoDB's official
+Community Server builds instead.
 
-- **Why:** a from-source `mongod` and `mongos` build is many hours of C++:
-  SCons for 7.0, Bazel for 8.0 and later. On the standard runner it would
-  likely hit the 6-hour job limit and can run out of disk or RAM.
-- **Runner:** run it on a GitHub larger runner (16+ cores, 64 GB RAM, 100+ GB
-  disk) by passing that runner's label as `runner`. Larger runners cost money,
-  even on public repos.
-- **Platforms:** only linux-x64 is wired up.
-- **Database Tools:** `mongodb-tools.yml` builds them on every platform. They
-  are plain Go and build in a few minutes.
+- **Source:** fastdl.mongodb.org. Each file is checked against the SHA-256 in
+  MongoDB's `full.json`, then repackaged into the same
+  `mongodb-<version>-<triple>/` layout as the other engines.
+- **Linux:** the Ubuntu 22.04 build (glibc 2.35, OpenSSL 3), which also runs
+  on newer distros.
+- **License:** SSPL. The matching source is in
+  [byreapp/mongo](https://github.com/byreapp/mongo).
+- **Smoke test:** `mongod --version` on linux-x64.
+- **Database Tools:** `mongodb-tools.yml` builds them from source on every
+  platform. They are plain Go and build in a few minutes.
 
 ## Running a workflow
 
@@ -257,7 +260,7 @@ uses `GITHUB_TOKEN` (`contents: write`) and needs no secrets.
 | Postgres, MySQL, MariaDB | `version`: `all` (default) or a version from `versions.json` |
 | Redis + Valkey | `engine`: `all`, `redis` or `valkey`; `version`: `all` or a version |
 | MongoDB tools | `version`: `all` or a version |
-| MongoDB | `version` (required); `runner`: a larger-runner label |
+| MongoDB mirror | none (mirrors every `mongodb.versions` entry that isn't fully mirrored yet) |
 | Postgres mirror | none (mirrors every numeric `postgres.versions` entry that isn't mirrored yet) |
 | Extensions | `name`: `all` or an extension name from `extensions.json` |
 
