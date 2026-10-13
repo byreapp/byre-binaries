@@ -1,0 +1,32 @@
+# Refreshes the build-status tables in README.md (scripts/readme-status.py)
+# after any build workflow finishes, and on demand.
+name: README status
+
+on:
+  workflow_run:
+    workflows: [Postgres, Postgres mirror, Extensions, MySQL, Redis + Valkey, MongoDB Tools, "MongoDB (manual, large runner)"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: readme
+  cancel-in-progress: false
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          scripts/readme-status.py
+          git diff --quiet README.md && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -qm "README: refresh build status" README.md
+          git pull -q --rebase && git push -q
