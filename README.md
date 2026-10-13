@@ -33,7 +33,7 @@ holds only the app. Every database binary is published here.
 | `mariadb.yml` | MariaDB from the archive.mariadb.org source tarball | `mariadb-<version>` |
 | `redis.yml` | Redis (download.redis.io) and Valkey (GitHub archive) | `redis-<version>`, `valkey-<version>` |
 | `mongodb.yml` | Checksum-verified copy of MongoDB's official Community Server builds | `mongodb-<version>` |
-| `check-versions.yml` | Daily at 00:00 UTC: opens an `Add <engine> <version>` issue for each upstream release `versions.json` is missing (closing it dismisses it) | none |
+| `check-versions.yml` | Daily at 00:00 UTC: opens an `Add <engine> <version>` issue for each vendor GA release `versions.json` is missing (closing it dismisses it) | none |
 | `mongodb-tools.yml` | MongoDB Database Tools (`mongodump` and the rest), Go cross-compile | `mongodb-tools-<version>` |
 
 ### Build status

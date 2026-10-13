@@ -1,4 +1,4 @@
-# Daily: opens an issue "Add <engine> <version>" for each upstream release
+# Daily: opens an issue "Add <engine> <version>" for each vendor GA release
 # versions.json is missing (scripts/check-versions.py). An issue that already
 # exists, open or closed, isn't recreated, so closing one dismisses it.
 name: Check versions
@@ -23,7 +23,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/check-versions.py --self-test
-          gh label create new-version --color 0e8a16 --description "Upstream release to add" 2>/dev/null || true
+          gh label create new-version --color 0e8a16 --description "Vendor release to add" 2>/dev/null || true
           have=$(gh issue list --label new-version --state all --limit 1000 --json title -q '.[].title')
           python3 scripts/check-versions.py | while read -r engine version kind; do
             title="Add $engine $version"
@@ -31,7 +31,7 @@ jobs:
             if [ "$kind" = patch ]; then
               body="$engine $version is a new patch release of a line we ship. Replace the older patch of that line in \`versions.json\` (\`$engine.versions\`), then run the $engine workflow (version \`all\`)."
             else
-              body="$engine $version starts a release line we don't ship. Check it's GA (not an RC/preview) before adding it to \`versions.json\` (\`$engine.versions\`); close this issue to skip it."
+              body="$engine $version starts a release line we don't ship. Add it to \`versions.json\` (\`$engine.versions\`); close this issue to skip it."
             fi
             gh issue create --title "$title" --label new-version --body "$body"
           done

@@ -1,36 +1,64 @@
 #!/usr/bin/env python3
-"""Prints one line per upstream release versions.json is missing:
+"""Prints one line per vendor release versions.json is missing:
     <engine> <version> patch   a newer patch of a release line we ship
-    <engine> <version> line    a release line newer than any we ship (may be an RC/preview)
-Upstream versions come from the projects' git tags (git ls-remote, no API limits).
+    <engine> <version> line    a newer GA release line than any we ship
+Versions come from each vendor's own release feed (GA only, no RCs/previews).
 Run: python3 scripts/check-versions.py   (python3 ... --self-test checks the logic offline)"""
-import json, re, subprocess, sys
+import json, re, subprocess, sys, urllib.request
 
-# engine: (repo, tag regex capturing the version, release-line length)
+
+def get(url):
+    return json.load(urllib.request.urlopen(url, timeout=60))
+
+
+def gh_releases(repo):
+    out = subprocess.run(["gh", "api", "--paginate", f"repos/{repo}/releases", "--jq", ".[] | select(.prerelease | not) | .tag_name"],
+                         capture_output=True, text=True, check=True).stdout
+    return {t for t in out.split() if re.fullmatch(r"\d+\.\d+\.\d+", t)}
+
+
+def postgres():
+    return {f"{r['major']}.{r['latestMinor']}.0" for r in get("https://www.postgresql.org/versions.json")
+            if r["supported"] and "." not in r["major"]}
+
+
+def mariadb():
+    lines = [r["release_id"] for r in get("https://downloads.mariadb.org/rest-api/mariadb/")["major_releases"]
+             if r["release_status"] == "Stable"]
+    return {v for l in lines for v in get(f"https://downloads.mariadb.org/rest-api/mariadb/{l}/")["releases"]}
+
+
+def mysql():
+    # MySQL has no release feed: git tags, kept only if the source tarball is on the CDN (see confirm).
+    out = subprocess.run(["git", "ls-remote", "--tags", "https://github.com/mysql/mysql-server"],
+                         capture_output=True, text=True, check=True).stdout
+    return set(re.findall(r"refs/tags/mysql-(\d+\.\d+\.\d+)$", out, re.M))
+
+
+def on_cdn(v):
+    try:
+        urllib.request.urlopen(urllib.request.Request(
+            f"https://cdn.mysql.com/Downloads/MySQL-{v.rsplit('.', 1)[0]}/mysql-{v}.tar.gz", method="HEAD"), timeout=60)
+        return True
+    except OSError:
+        return False
+
+
+# engine: (vendor versions, release-line length, check before reporting)
 UPSTREAM = {
-    "postgres": ("postgres/postgres", r"REL_(\d+)_(\d+)", 1),
-    "mysql": ("mysql/mysql-server", r"mysql-(\d+\.\d+\.\d+)", 2),
-    "mariadb": ("MariaDB/server", r"mariadb-(\d+\.\d+\.\d+)", 2),
-    "redis": ("redis/redis", r"(\d+\.\d+\.\d+)", 2),
-    "valkey": ("valkey-io/valkey", r"(\d+\.\d+\.\d+)", 2),
-    "mongodb": ("mongodb/mongo", r"r(\d+\.\d+\.\d+)", 2),
-    "mongodb-tools": ("mongodb/mongo-tools", r"(\d+\.\d+\.\d+)", 2),
+    "postgres": (postgres, 1, None),
+    "mysql": (mysql, 2, on_cdn),
+    "mariadb": (mariadb, 2, None),
+    "redis": (lambda: gh_releases("redis/redis"), 2, None),
+    "valkey": (lambda: gh_releases("valkey-io/valkey"), 2, None),
+    "mongodb": (lambda: {r["version"] for r in get("https://downloads.mongodb.org/current.json")["versions"]
+                         if r["production_release"]}, 2, None),
+    "mongodb-tools": (lambda: {r["version"] for r in get("https://downloads.mongodb.org/tools/db/release.json")["versions"]}, 2, None),
 }
 
 
 def key(v):
     return tuple(int(x) for x in v.split("."))
-
-
-def upstream(repo, pattern):
-    out = subprocess.run(["git", "ls-remote", "--tags", f"https://github.com/{repo}"],
-                         capture_output=True, text=True, check=True).stdout
-    found = set()
-    for ref in out.split():
-        m = re.fullmatch(r"refs/tags/" + pattern, ref)
-        if m:  # postgres tags REL_18_6 → 18.6.0, the layout versions.json uses
-            found.add(".".join(m.groups()) + ".0" if len(m.groups()) == 2 else m.group(1))
-    return found
 
 
 def missing(ours, theirs, n):
@@ -61,6 +89,7 @@ if __name__ == "__main__":
     if sys.argv[1:] == ["--self-test"]:
         sys.exit(self_test())
     versions = json.load(open("versions.json"))
-    for engine, (repo, pattern, n) in UPSTREAM.items():
-        for v, kind in missing(versions[engine]["versions"], upstream(repo, pattern), n):
-            print(engine, v, kind)
+    for engine, (fetch, n, confirm) in UPSTREAM.items():
+        for v, kind in missing(versions[engine]["versions"], fetch(), n):
+            if confirm is None or confirm(v):
+                print(engine, v, kind)
