@@ -39,6 +39,6 @@ jobs:
             else
               body="$engine $version starts a release line we don't ship. Add it to \`versions.json\` (\`$engine.versions\`); close this issue to skip it."
             fi
-            url=$(gh issue create --title "$title" --label new-version --body "$body")
+            url=$(gh issue create --title "$title" --label new-version --assignee sumantadotai --body "$body")
             echo "- $title: opened $url" >> "$GITHUB_STEP_SUMMARY"
           done < missing.txt
