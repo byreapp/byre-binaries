@@ -27,7 +27,7 @@ permissions:
 
 jobs:
   plan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       exts: ${{ steps.p.outputs.exts }}
     steps:
@@ -184,7 +184,7 @@ jobs:
       fail-fast: false
       matrix:
         ext: ${{ fromJSON(needs.plan.outputs.exts) }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
