@@ -9,9 +9,9 @@
 set -euo pipefail
 # Paths below are already Windows-style; MSYS would split "-FoD:/a/…" at the colon.
 export MSYS_NO_PATHCONV=1
-src=$1 root=$2
-here=$(cd "$(dirname "$0")" && pwd)
-shim=$(mktemp -d)
+src=$(cygpath -m "$1") root=$(cygpath -m "$2")
+here=$(cygpath -m "$(cd "$(dirname "$0")" && pwd)")
+shim=$(cygpath -m "$(mktemp -d)")
 # pg_config that answers --pgxs with the stub and forwards everything else
 # (pg_partman's Makefile checks --version).
 printf '#!/bin/sh\n[ "$1" = --pgxs ] && { echo "%s"; exit 0; }\nexec "%s" "$@"\n' \
