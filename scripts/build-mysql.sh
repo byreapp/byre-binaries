@@ -35,11 +35,14 @@ case "$(uname -s)" in
       -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl)
     # Install copies openssl.exe into bin; vcpkg keeps it under tools/, else Git's.
     ossl="$VCPKG_INSTALLED/tools/openssl/openssl.exe"; [ -f "$ossl" ] || ossl=$(command -v openssl.exe)
-    opts+=(-DOPENSSL_EXECUTABLE="$(cygpath -m "$ossl")") ;;
+    opts+=(-DOPENSSL_EXECUTABLE="$(cygpath -m "$ossl")")
+    # Install copies every .pdb unconditionally, and Release makes none.
+    opts+=(-DCMAKE_BUILD_TYPE=RelWithDebInfo) ;;
 esac
 cmake -S "$src" -B "$src/build" "${opts[@]}"
 cmake --build "$src/build"
 cmake --install "$src/build"
+find "$prefix" -name '*.pdb' -delete # Windows debug symbols, ~1 GB
 rm -rf "$src" # frees ~10 GB before packaging
 case "$(uname -s)" in
   Darwin) "$here/relocate-macos.sh" "$prefix" ;;
