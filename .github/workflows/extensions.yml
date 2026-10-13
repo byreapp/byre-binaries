@@ -78,7 +78,9 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
         if: runner.os == 'Windows'
       - if: runner.os == 'Windows'
-        run: choco install make -y --no-progress # reads PGXS Makefiles (build-ext-windows.sh)
+        run: |
+          choco install make -y --no-progress # reads PGXS Makefiles (build-ext-windows.sh)
+          python -m pip install -q ninja # timescaledb: no cmd.exe 8 KB command-line cap
       - name: Build for every Postgres major
         run: |
           set -euo pipefail
@@ -93,14 +95,18 @@ jobs:
             echo "$EXT isn't built for $BYRE_PLATFORM"; exit 0
           fi
           # Tags are v1.2.3 for most projects, bare 1.2.3 for some (hypopg, timescaledb).
-          mkdir src
+          # Windows: a short path, so timescaledb's long `cat` command lines fit.
+          src=src; [ "$RUNNER_OS" = Windows ] && src=/d/s
+          mkdir "$src"
           curl -fsSL "$repo/archive/refs/tags/v$ver.tar.gz" -o src.tgz ||
             curl -fsSL "$repo/archive/refs/tags/$ver.tar.gz" -o src.tgz
           # Windows tar can't make symlinks to files it hasn't extracted yet;
           # only test fixtures (timescaledb) are symlinks.
-          tar xzf src.tgz -C src --strip-components=1 || [ "$RUNNER_OS" = Windows ]
-          src="$PWD/src"
+          tar xzf src.tgz -C "$src" --strip-components=1 || [ "$RUNNER_OS" = Windows ]
+          src=$(cd "$src" && pwd)
           for m in $(jq -r '.majors[]' <<<"$ext"); do
+            # Combos that don't build (pg_ivm needs globals 14 doesn't export on Windows).
+            jq -e --arg k "pg$m-$BYRE_PLATFORM" '.skip // [] | index($k)' <<<"$ext" >/dev/null && continue
             exact=$(jq -r --arg m "$m" '.postgres[] | select(.major == $m) | .exact' extensions.json)
             rm -rf pg out added.txt && mkdir pg
             curl -fsSL "https://github.com/theseus-rs/postgresql-binaries/releases/download/$exact/postgresql-$exact-$TRIPLE.tar.gz" | tar xz -C pg
@@ -111,7 +117,7 @@ jobs:
             before=$(cd "$root" && find lib share/extension -type f | sort)
             if [ "$RUNNER_OS" = Windows ] && [ "$build" = cmake ]; then
               rm -rf "$src/build"
-              cmake -S "$src" -B "$src/build" -G "NMake Makefiles" -DPG_CONFIG="$cfg.exe" -DAPACHE_ONLY=ON \
+              cmake -S "$src" -B "$src/build" -G Ninja -DPG_CONFIG="$cfg.exe" -DAPACHE_ONLY=ON \
                 -DREGRESS_CHECKS=OFF -DTAP_CHECKS=OFF -DWARNINGS_AS_ERRORS=OFF -DSEND_TELEMETRY_DEFAULT=OFF \
                 -DUSE_OPENSSL=OFF -DCMAKE_BUILD_TYPE=Release
               cmake --build "$src/build"

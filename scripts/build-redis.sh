@@ -18,6 +18,8 @@ cd "$prefix-src"
 if [[ $(uname -s) == MSYS* ]]; then
   sed -i 's/__GNU_VISIBLE/1/' /usr/include/dlfcn.h
   export CFLAGS="-Wno-char-subscripts -D_GNU_SOURCE"
+  # Redis' test modules (.so) don't link under Cygwin; they're tests only.
+  sed -i '/^all:/s/ module_tests//' src/Makefile
 fi
 # src/ directly: Redis 8's top-level `make` also builds the modules (search,
 # json, …), which need Rust and GNU make 4.
