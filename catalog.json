@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-13T05:47:46Z",
+  "updated": "2026-10-13T12:48:47Z",
   "engines": [
     {
       "id": "postgres",
@@ -87,6 +87,67 @@
       ]
     },
     {
+      "id": "mariadb",
+      "name": "MariaDB",
+      "versions": [
+        {
+          "major": "13.0",
+          "exact": "13.0.2",
+          "url": {
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-13.0.2/mariadb-13.0.2-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-13.0.2/mariadb-13.0.2-x86_64-apple-darwin.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-13.0.2/mariadb-13.0.2-aarch64-unknown-linux-gnu.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-13.0.2/mariadb-13.0.2-x86_64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-13.0.2/mariadb-13.0.2-x86_64-pc-windows-msvc.tar.gz"
+          }
+        },
+        {
+          "major": "12.3",
+          "exact": "12.3.3",
+          "url": {
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-x86_64-apple-darwin.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-aarch64-unknown-linux-gnu.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-x86_64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-x86_64-pc-windows-msvc.tar.gz"
+          }
+        },
+        {
+          "major": "11.8",
+          "exact": "11.8.9",
+          "url": {
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.8.9/mariadb-11.8.9-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.8.9/mariadb-11.8.9-x86_64-apple-darwin.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.8.9/mariadb-11.8.9-aarch64-unknown-linux-gnu.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.8.9/mariadb-11.8.9-x86_64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.8.9/mariadb-11.8.9-x86_64-pc-windows-msvc.tar.gz"
+          }
+        },
+        {
+          "major": "11.4",
+          "exact": "11.4.13",
+          "url": {
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.4.13/mariadb-11.4.13-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.4.13/mariadb-11.4.13-x86_64-apple-darwin.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.4.13/mariadb-11.4.13-aarch64-unknown-linux-gnu.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.4.13/mariadb-11.4.13-x86_64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.4.13/mariadb-11.4.13-x86_64-pc-windows-msvc.tar.gz"
+          }
+        },
+        {
+          "major": "10.11",
+          "exact": "10.11.19",
+          "url": {
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-x86_64-apple-darwin.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-aarch64-unknown-linux-gnu.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-x86_64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-x86_64-pc-windows-msvc.tar.gz"
+          }
+        }
+      ]
+    },
+    {
       "id": "mongodb",
       "name": "MongoDB",
       "versions": [
@@ -121,6 +182,23 @@
             "linux-x64": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-7.0.43.tgz",
             "linux-arm64": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-7.0.43.tgz",
             "windows-x64": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-7.0.43.zip"
+          }
+        }
+      ]
+    },
+    {
+      "id": "redis",
+      "name": "Redis",
+      "versions": [
+        {
+          "major": "8.10",
+          "exact": "8.10.2",
+          "url": {
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-x86_64-apple-darwin.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-aarch64-unknown-linux-gnu.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-x86_64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/redis-8.10.2/redis-8.10.2-x86_64-pc-windows-msvc.tar.gz"
           }
         }
       ]
