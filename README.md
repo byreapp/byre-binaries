@@ -71,7 +71,7 @@ from `versions.json`, `extensions.json` and the published releases by
 <tr><td rowspan="1">mongodb-tools</td><td><a href="https://github.com/byreapp/byre-binaries/releases/tag/mongodb-tools-100.19.1">100.19.1</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-aarch64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-x86_64-apple-darwin.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-x86_64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-aarch64-unknown-linux-gnu.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-x86_64-pc-windows-msvc.tar.gz">✅</a></td></tr>
 </table>
 
-#### Postgres mirror (theseus, what Byre downloads)
+#### Postgres mirror (theseus, what Byre 0.3.0 downloads)
 
 | Version | macos-arm64 | macos-x64 | linux-x64 | linux-arm64 | windows-x64 |
 |---|---|---|---|---|---|

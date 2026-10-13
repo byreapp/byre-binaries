@@ -4,7 +4,7 @@
 # from-source engines. Each download is checked against the SHA-256 in
 # MongoDB's full.json, then repackaged as mongodb-<version>-<triple>/{bin,…}.
 # Linux is the Ubuntu 22.04 build (glibc 2.35, OpenSSL 3), which also runs on
-# newer distros. Not used by Byre yet.
+# newer distros. Byre downloads these (catalog.json).
 #
 # A from-source build doesn't fit the free runners (hours of Bazel, more disk
 # than they have), so this mirrors instead. Source: byreapp/mongo (SSPL).
@@ -54,6 +54,7 @@ jobs:
               esac
               rm "x/${url##*/}" && mv x/* "x/$name"
               find x -name '*.pdb' -delete # Windows debug symbols, ~1.3 GB
+              find x -name '._*' -delete # macOS AppleDouble junk; macOS bsdtar chokes on it
               tar czf "dist/$name.tar.gz" -C x "$name"
               (cd dist && sha256sum "$name.tar.gz" > "$name.tar.gz.sha256")
               # Smoke test the build this runner can execute.
@@ -62,6 +63,6 @@ jobs:
             tag="mongodb-$v"
             gh release view "$tag" >/dev/null 2>&1 ||
               gh release create "$tag" --prerelease --latest=false --title "MongoDB $v (official build)" \
-                --notes "MongoDB Community Server $v, mirrored from fastdl.mongodb.org (checksums verified against MongoDB's full.json). Linux is the Ubuntu 22.04 build. SSPL; source at https://github.com/byreapp/mongo. Not used by Byre yet."
+                --notes "MongoDB Community Server $v, mirrored from fastdl.mongodb.org (checksums verified against MongoDB's full.json). Linux is the Ubuntu 22.04 build. SSPL; source at https://github.com/byreapp/mongo."
             gh release upload "$tag" dist/* --clobber
           done

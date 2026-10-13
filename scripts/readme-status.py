@@ -60,7 +60,7 @@ out += grouped(["Engine", "Version", *PLATFORMS], [
               for v in spec["versions"]])
     for engine, spec in versions.items()])
 
-out += ["", "#### Postgres mirror (theseus, what Byre downloads)", "", "| Version " + HEAD, "|---|" + "---|" * len(PLATFORMS)]
+out += ["", "#### Postgres mirror (theseus, what Byre 0.3.0 downloads)", "", "| Version " + HEAD, "|---|" + "---|" * len(PLATFORMS)]
 for pg in exts["postgres"]:
     tag = f"pg-{pg['exact']}"
     cells = [cell(tag, f"postgresql-{pg['exact']}-{t}.tar.gz", True) for t in PLATFORMS.values()]
@@ -111,17 +111,28 @@ for e in exts["extensions"]:
     live.append(entry)
 cat["extensions"] = live
 
-# Postgres: the app downloads theseus directly; the mirror holds the same tags,
-# so a published pg-<exact> release means that version is out.
+# Postgres: Byre 0.4+ builds the postgres-<tag> URL from `exact` ("19beta4" ↔
+# "19.0.0-beta4"), so a published postgres-<tag> release means that version is
+# out. No `url`: 0.3.0 reads a Postgres url as a Postgres.app DMG (and, lacking
+# one, shows a beta as unavailable; its releases still come from theseus).
 pg = next(e for e in cat["engines"] if e["id"] == "postgres")
-for m in exts["postgres"]:
-    if not any(n.endswith(".tar.gz") for n in assets.get(f"pg-{m['exact']}", {})):
+for v in versions["postgres"]["versions"]:
+    if not any(n.endswith(".tar.gz") for n in assets.get(f"postgres-{v}", {})):
         continue
-    cur = next((x for x in pg["versions"] if x["major"] == m["major"] and not x.get("beta")), None)
-    if cur:
-        cur["exact"] = m["exact"]
+    num, pre = re.match(r"([\d.]+)(.*)", v).groups()
+    major = num.split(".")[0]
+    exact = f"{major}.0.0-{pre}" if pre else v
+    cur = next((x for x in pg["versions"] if x["major"] == major), None)
+    if cur and pre and not cur.get("beta"):
+        continue  # the final release is out; don't regress to a pre-release
+    if not cur:
+        pg["versions"].append(cur := {"major": major})
+    cur.pop("url", None)
+    cur["exact"] = exact
+    if pre:
+        cur["beta"] = True
     else:
-        pg["versions"].append({"major": m["major"], "exact": m["exact"]})
+        cur.pop("beta", None)
 pg["versions"].sort(key=lambda x: int(x["major"]), reverse=True)
 
 if json.dumps({k: v for k, v in cat.items() if k != "updated"}, sort_keys=True) != before or "updated" not in cat:

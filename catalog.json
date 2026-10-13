@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-13T12:48:47Z",
+  "updated": "2026-10-13T13:16:38Z",
   "engines": [
     {
       "id": "postgres",
@@ -8,11 +8,7 @@
         {
           "major": "19",
           "exact": "19.0.0-beta4",
-          "beta": true,
-          "url": {
-            "macos-arm64": "https://github.com/PostgresApp/PostgresApp/releases/download/v3alpha10/Postgres-3alpha10-19.dmg",
-            "macos-x64": "https://github.com/PostgresApp/PostgresApp/releases/download/v3alpha10/Postgres-3alpha10-19.dmg"
-          }
+          "beta": true
         },
         {
           "major": "18",
@@ -44,44 +40,44 @@
           "major": "26.7",
           "exact": "26.7.0",
           "url": {
-            "macos-arm64": "https://cdn.mysql.com/Downloads/MySQL-26.7/mysql-26.7.0-macos15-arm64.tar.gz",
-            "macos-x64": "https://cdn.mysql.com/Downloads/MySQL-26.7/mysql-26.7.0-macos15-x86_64.tar.gz",
-            "linux-arm64": "https://cdn.mysql.com/Downloads/MySQL-26.7/mysql-26.7.0-linux-glibc2.28-aarch64.tar.xz",
-            "linux-x64": "https://cdn.mysql.com/Downloads/MySQL-26.7/mysql-26.7.0-linux-glibc2.28-x86_64.tar.xz",
-            "windows-x64": "https://cdn.mysql.com/Downloads/MySQL-26.7/mysql-26.7.0-winx64.zip"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-26.7.0/mysql-26.7.0-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-26.7.0/mysql-26.7.0-x86_64-apple-darwin.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-26.7.0/mysql-26.7.0-aarch64-unknown-linux-gnu.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-26.7.0/mysql-26.7.0-x86_64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-26.7.0/mysql-26.7.0-x86_64-pc-windows-msvc.tar.gz"
           }
         },
         {
           "major": "9.7",
           "exact": "9.7.2",
           "url": {
-            "macos-arm64": "https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.2-macos15-arm64.tar.gz",
-            "macos-x64": "https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.2-macos15-x86_64.tar.gz",
-            "linux-arm64": "https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.2-linux-glibc2.28-aarch64.tar.xz",
-            "linux-x64": "https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.2-linux-glibc2.28-x86_64.tar.xz",
-            "windows-x64": "https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.2-winx64.zip"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.7.2/mysql-9.7.2-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.7.2/mysql-9.7.2-x86_64-apple-darwin.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.7.2/mysql-9.7.2-aarch64-unknown-linux-gnu.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.7.2/mysql-9.7.2-x86_64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.7.2/mysql-9.7.2-x86_64-pc-windows-msvc.tar.gz"
           }
         },
         {
           "major": "9.5",
           "exact": "9.5.0",
           "url": {
-            "macos-arm64": "https://cdn.mysql.com/Downloads/MySQL-9.5/mysql-9.5.0-macos15-arm64.tar.gz",
-            "macos-x64": "https://cdn.mysql.com/Downloads/MySQL-9.5/mysql-9.5.0-macos15-x86_64.tar.gz",
-            "linux-arm64": "https://cdn.mysql.com/Downloads/MySQL-9.5/mysql-9.5.0-linux-glibc2.28-aarch64.tar.xz",
-            "linux-x64": "https://cdn.mysql.com/Downloads/MySQL-9.5/mysql-9.5.0-linux-glibc2.28-x86_64.tar.xz",
-            "windows-x64": "https://cdn.mysql.com/Downloads/MySQL-9.5/mysql-9.5.0-winx64.zip"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-x86_64-apple-darwin.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-aarch64-unknown-linux-gnu.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-x86_64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-x86_64-pc-windows-msvc.tar.gz"
           }
         },
         {
           "major": "8.4",
           "exact": "8.4.11",
           "url": {
-            "macos-arm64": "https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-8.4.11-macos15-arm64.tar.gz",
-            "macos-x64": "https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-8.4.11-macos15-x86_64.tar.gz",
-            "linux-arm64": "https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-8.4.11-linux-glibc2.28-aarch64.tar.xz",
-            "linux-x64": "https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-8.4.11-linux-glibc2.28-x86_64.tar.xz",
-            "windows-x64": "https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-8.4.11-winx64.zip"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-8.4.11/mysql-8.4.11-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-8.4.11/mysql-8.4.11-x86_64-apple-darwin.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-8.4.11/mysql-8.4.11-aarch64-unknown-linux-gnu.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-8.4.11/mysql-8.4.11-x86_64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-8.4.11/mysql-8.4.11-x86_64-pc-windows-msvc.tar.gz"
           }
         }
       ]
@@ -155,33 +151,33 @@
           "major": "9.0",
           "exact": "9.0.2",
           "url": {
-            "macos-arm64": "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-9.0.2.tgz",
-            "macos-x64": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-9.0.2.tgz",
-            "linux-x64": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-9.0.2.tgz",
-            "linux-arm64": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-9.0.2.tgz",
-            "windows-x64": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-9.0.2.zip"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.2/mongodb-9.0.2-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.2/mongodb-9.0.2-x86_64-apple-darwin.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.2/mongodb-9.0.2-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.2/mongodb-9.0.2-aarch64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.2/mongodb-9.0.2-x86_64-pc-windows-msvc.tar.gz"
           }
         },
         {
           "major": "8.0",
           "exact": "8.0.32",
           "url": {
-            "macos-arm64": "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-8.0.32.tgz",
-            "macos-x64": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-8.0.32.tgz",
-            "linux-x64": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-8.0.32.tgz",
-            "linux-arm64": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-8.0.32.tgz",
-            "windows-x64": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-8.0.32.zip"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.32/mongodb-8.0.32-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.32/mongodb-8.0.32-x86_64-apple-darwin.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.32/mongodb-8.0.32-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.32/mongodb-8.0.32-aarch64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.32/mongodb-8.0.32-x86_64-pc-windows-msvc.tar.gz"
           }
         },
         {
           "major": "7.0",
           "exact": "7.0.43",
           "url": {
-            "macos-arm64": "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-7.0.43.tgz",
-            "macos-x64": "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-7.0.43.tgz",
-            "linux-x64": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-7.0.43.tgz",
-            "linux-arm64": "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-7.0.43.tgz",
-            "windows-x64": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-7.0.43.zip"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.43/mongodb-7.0.43-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.43/mongodb-7.0.43-x86_64-apple-darwin.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.43/mongodb-7.0.43-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.43/mongodb-7.0.43-aarch64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.43/mongodb-7.0.43-x86_64-pc-windows-msvc.tar.gz"
           }
         }
       ]
@@ -204,6 +200,23 @@
       ]
     },
     {
+      "id": "valkey",
+      "name": "Valkey",
+      "versions": [
+        {
+          "major": "9.1",
+          "exact": "9.1.2",
+          "url": {
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-x86_64-apple-darwin.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-aarch64-unknown-linux-gnu.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-x86_64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.2/valkey-9.1.2-x86_64-pc-windows-msvc.tar.gz"
+          }
+        }
+      ]
+    },
+    {
       "id": "mongodb-tools",
       "name": "MongoDB Database Tools",
       "versions": [
@@ -211,11 +224,11 @@
           "major": "100",
           "exact": "100.19.1",
           "url": {
-            "macos-arm64": "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-macos-arm64-100.19.1.zip",
-            "macos-x64": "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-macos-x86_64-100.19.1.zip",
-            "linux-x64": "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2204-x86_64-100.19.1.tgz",
-            "linux-arm64": "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2204-arm64-100.19.1.tgz",
-            "windows-x64": "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-windows-x86_64-100.19.1.zip"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-x86_64-apple-darwin.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-aarch64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-x86_64-pc-windows-msvc.tar.gz"
           }
         }
       ]
