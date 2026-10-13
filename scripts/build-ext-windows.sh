@@ -7,6 +7,8 @@
 # Needs: MSVC dev env (ilammy/msvc-dev-cmd), GNU make on PATH.
 # Options are written -x, not /x: Git Bash rewrites "/x" into a path.
 set -euo pipefail
+# Paths below are already Windows-style; MSYS would split "-FoD:/a/…" at the colon.
+export MSYS_NO_PATHCONV=1
 src=$1 root=$2
 here=$(cd "$(dirname "$0")" && pwd)
 shim=$(mktemp -d)
@@ -27,7 +29,7 @@ big=$(var MODULE_big)
 
 w=$(cygpath -m "$root")
 cflags=(-nologo -O2 -MD -fp:fast -I"$w/include/server/port/win32_msvc" -I"$w/include/server/port/win32"
-  -I"$w/include/server" -I"$w/include" -I"$(cygpath -m "$src")")
+  -I"$w/include/server" -I"$w/include" -I"$(cygpath -m "$src")" -FI"$(cygpath -m "$here/msvc-compat.h")")
 for f in $(var PG_CPPFLAGS); do
   [[ $f == -I?* ]] && cflags+=(-I"$(cygpath -m "$src/${f#-I}")")
 done

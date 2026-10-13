@@ -96,7 +96,9 @@ jobs:
           mkdir src
           curl -fsSL "$repo/archive/refs/tags/v$ver.tar.gz" -o src.tgz ||
             curl -fsSL "$repo/archive/refs/tags/$ver.tar.gz" -o src.tgz
-          tar xzf src.tgz -C src --strip-components=1
+          # Windows tar can't make symlinks to files it hasn't extracted yet;
+          # only test fixtures (timescaledb) are symlinks.
+          tar xzf src.tgz -C src --strip-components=1 || [ "$RUNNER_OS" = Windows ]
           src="$PWD/src"
           for m in $(jq -r '.majors[]' <<<"$ext"); do
             exact=$(jq -r --arg m "$m" '.postgres[] | select(.major == $m) | .exact' extensions.json)

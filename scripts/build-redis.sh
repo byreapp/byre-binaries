@@ -14,7 +14,11 @@ curl -fsSL "$url" | tar xz -C "$prefix-src" --strip-components=1
 cd "$prefix-src"
 # Windows: an MSYS2 (Cygwin-style POSIX) build; its dlfcn.h hides Dl_info,
 # which debug.c uses, unless __GNU_VISIBLE.
-[[ $(uname -s) == MSYS* ]] && sed -i 's/__GNU_VISIBLE/1/' /usr/include/dlfcn.h
+# Cygwin's ctype trips hiredis' -Werror=char-subscripts; asprintf needs _GNU_SOURCE.
+if [[ $(uname -s) == MSYS* ]]; then
+  sed -i 's/__GNU_VISIBLE/1/' /usr/include/dlfcn.h
+  export CFLAGS="-Wno-char-subscripts -D_GNU_SOURCE"
+fi
 # src/ directly: Redis 8's top-level `make` also builds the modules (search,
 # json, …), which need Rust and GNU make 4.
 make -C src -j"$(getconf _NPROCESSORS_ONLN)"
