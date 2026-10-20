@@ -149,35 +149,35 @@
       "versions": [
         {
           "major": "9.0",
-          "exact": "9.0.2",
+          "exact": "9.0.4",
           "url": {
-            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.2/mongodb-9.0.2-aarch64-apple-darwin.tar.gz",
-            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.2/mongodb-9.0.2-x86_64-apple-darwin.tar.gz",
-            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.2/mongodb-9.0.2-x86_64-unknown-linux-gnu.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.2/mongodb-9.0.2-aarch64-unknown-linux-gnu.tar.gz",
-            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.2/mongodb-9.0.2-x86_64-pc-windows-msvc.tar.gz"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.4/mongodb-9.0.4-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.4/mongodb-9.0.4-x86_64-apple-darwin.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.4/mongodb-9.0.4-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.4/mongodb-9.0.4-aarch64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.4/mongodb-9.0.4-x86_64-pc-windows-msvc.tar.gz"
           }
         },
         {
           "major": "8.0",
-          "exact": "8.0.32",
+          "exact": "8.0.34",
           "url": {
-            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.32/mongodb-8.0.32-aarch64-apple-darwin.tar.gz",
-            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.32/mongodb-8.0.32-x86_64-apple-darwin.tar.gz",
-            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.32/mongodb-8.0.32-x86_64-unknown-linux-gnu.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.32/mongodb-8.0.32-aarch64-unknown-linux-gnu.tar.gz",
-            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.32/mongodb-8.0.32-x86_64-pc-windows-msvc.tar.gz"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.34/mongodb-8.0.34-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.34/mongodb-8.0.34-x86_64-apple-darwin.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.34/mongodb-8.0.34-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.34/mongodb-8.0.34-aarch64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.34/mongodb-8.0.34-x86_64-pc-windows-msvc.tar.gz"
           }
         },
         {
           "major": "7.0",
-          "exact": "7.0.43",
+          "exact": "7.0.45",
           "url": {
-            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.43/mongodb-7.0.43-aarch64-apple-darwin.tar.gz",
-            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.43/mongodb-7.0.43-x86_64-apple-darwin.tar.gz",
-            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.43/mongodb-7.0.43-x86_64-unknown-linux-gnu.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.43/mongodb-7.0.43-aarch64-unknown-linux-gnu.tar.gz",
-            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.43/mongodb-7.0.43-x86_64-pc-windows-msvc.tar.gz"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.45/mongodb-7.0.45-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.45/mongodb-7.0.45-x86_64-apple-darwin.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.45/mongodb-7.0.45-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.45/mongodb-7.0.45-aarch64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.45/mongodb-7.0.45-x86_64-pc-windows-msvc.tar.gz"
           }
         }
       ]
