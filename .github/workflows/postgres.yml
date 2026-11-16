@@ -15,6 +15,10 @@
 name: Postgres
 
 on:
+  # A merged versions/<engine> PR (check-versions.yml). Published targets are skipped.
+  push:
+    branches: [main]
+    paths: [versions.json]
   workflow_dispatch:
     inputs:
       version:
@@ -48,7 +52,7 @@ jobs:
       - id: p
         env:
           GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ inputs.version }}
+          VERSION: ${{ inputs.version || 'all' }}
         run: |
           b=$(scripts/plan.sh postgres "$VERSION" "$TARGETS")
           echo "builds=$b" >> "$GITHUB_OUTPUT"

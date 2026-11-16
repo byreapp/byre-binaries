@@ -3,7 +3,8 @@
     <engine> <version> patch   a newer patch of a release line we ship
     <engine> <version> line    a newer GA release line than any we ship
 Versions come from each vendor's own release feed (GA only, no RCs/previews).
-Run: python3 scripts/check-versions.py   (python3 ... --self-test checks the logic offline)"""
+Run: python3 scripts/check-versions.py   (python3 ... --self-test checks the logic offline)
+     python3 scripts/check-versions.py --apply <engine> <version> <patch|line>   edits versions.json"""
 import json, os, re, subprocess, sys, urllib.request
 
 
@@ -78,16 +79,34 @@ def missing(ours, theirs, n):
             yield v, "line"
 
 
+def apply(ours, v, kind, n):
+    """patch: replace the shipped version of v's line. line: insert v, keeping newest-first."""
+    num = lambda x: re.fullmatch(r"[\d.]+", x)
+    if kind == "patch":
+        return [v if num(x) and key(x)[:n] == key(v)[:n] else x for x in ours]
+    i = next((i for i, x in enumerate(ours) if num(x) and key(x) < key(v)), len(ours))
+    return ours[:i] + [v] + ours[i:]
+
+
 def self_test():
     got = list(missing(["9.7.2", "8.4.11", "26beta"], {"8.4.12", "8.4.10", "9.7.2", "8.0.40", "9.8.0", "10.0.1"}, 2))
     assert got == [("8.4.12", "patch"), ("9.8.0", "line"), ("10.0.1", "line")], got
     assert list(missing(["18.6.0", "19beta4"], {"18.7.0", "19.0.0", "17.12.0"}, 1)) == [("18.7.0", "patch"), ("19.0.0", "line")]
+    assert apply(["19beta4", "18.6.0", "17.11.0"], "17.12.0", "patch", 1) == ["19beta4", "18.6.0", "17.12.0"]
+    assert apply(["26.7.0", "9.7.2"], "26.10.0", "line", 2) == ["26.10.0", "26.7.0", "9.7.2"]
+    assert apply(["19beta4", "18.6.0"], "20.0.0", "line", 1) == ["19beta4", "20.0.0", "18.6.0"]
     print("ok")
 
 
 if __name__ == "__main__":
     if sys.argv[1:] == ["--self-test"]:
         sys.exit(self_test())
+    if sys.argv[1:2] == ["--apply"]:
+        engine, v, kind = sys.argv[2:5]
+        versions = json.load(open("versions.json"))
+        versions[engine]["versions"] = apply(versions[engine]["versions"], v, kind, UPSTREAM[engine][1])
+        open("versions.json", "w").write(json.dumps(versions, indent=2) + "\n")
+        sys.exit()
     versions = json.load(open("versions.json"))
     rows = ["| Engine | We ship | Vendor latest | Missing |", "|---|---|---|---|"]
     for engine, (fetch, n, confirm) in UPSTREAM.items():

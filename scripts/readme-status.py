@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Rewrites the build-status tables in README.md (between the status markers)
 from versions.json, extensions.json and the repo's published release assets,
-and the extensions + Postgres versions in catalog.json — the live catalog the
+and the extensions + engine versions in catalog.json — the live catalog the
 Byre app fetches, so only what's actually published shows up in the app.
   ✅ published (links to the tarball)   ❌ planned, not published   — not built for it
 Needs `gh` (GH_TOKEN) and GITHUB_REPOSITORY (default byreapp/byre-binaries)."""
@@ -84,7 +84,7 @@ assert new != readme or "<!-- status:start -->" in readme, "status markers missi
 open("README.md", "w").write(new)
 
 
-# --- catalog.json (the app's live catalog; engines other than Postgres are hand-edited)
+# --- catalog.json (the app's live catalog)
 cat = json.load(open("catalog.json"))
 before = json.dumps({k: v for k, v in cat.items() if k != "updated"}, sort_keys=True)
 old = {e["name"]: e for e in cat["extensions"]}
@@ -134,6 +134,25 @@ for v in versions["postgres"]["versions"]:
     else:
         cur.pop("beta", None)
 pg["versions"].sort(key=lambda x: int(x["major"]), reverse=True)
+
+# Other engines: a version goes live once every platform's tarball is published;
+# until then its line keeps serving the previous patch. Lines dropped from
+# versions.json leave the catalog. Line = catalog "major": 8.4.13 -> 8.4, tools 100.20.1 -> 100.
+for e in cat["engines"]:
+    eid = e["id"]
+    if eid == "postgres" or eid not in versions:
+        continue
+    line = (lambda v: v.split(".")[0]) if eid == "mongodb-tools" else (lambda v: ".".join(v.split(".")[:2]))
+    prev = {x["major"]: x for x in e["versions"]}
+    live = []
+    for v in versions[eid]["versions"]:
+        urls = {p: assets.get(f"{eid}-{v}", {}).get(f"{eid}-{v}-{t}.tar.gz")
+                for p, t in PLATFORMS.items() if p in versions[eid]["platforms"]}
+        if all(urls.values()):
+            live.append({"major": line(v), "exact": v, "url": urls})
+        elif line(v) in prev:
+            live.append(prev[line(v)])
+    e["versions"] = live
 
 if json.dumps({k: v for k, v in cat.items() if k != "updated"}, sort_keys=True) != before or "updated" not in cat:
     cat = {"updated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), **{k: v for k, v in cat.items() if k != "updated"}}

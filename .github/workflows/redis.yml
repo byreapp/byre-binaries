@@ -11,6 +11,10 @@
 name: Redis + Valkey
 
 on:
+  # A merged versions/<engine> PR (check-versions.yml). Published targets are skipped.
+  push:
+    branches: [main]
+    paths: [versions.json]
   workflow_dispatch:
     inputs:
       engine:
@@ -46,8 +50,8 @@ jobs:
       - id: p
         env:
           GH_TOKEN: ${{ github.token }}
-          ENGINE: ${{ inputs.engine }}
-          VERSION: ${{ inputs.version }}
+          ENGINE: ${{ inputs.engine || 'all' }}
+          VERSION: ${{ inputs.version || 'all' }}
         run: |
           set -euo pipefail
           builds='[]'

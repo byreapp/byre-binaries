@@ -1,6 +1,9 @@
 # Daily: opens an issue "Add <engine> <version>" for each vendor GA release
-# versions.json is missing (scripts/check-versions.py). An issue that already
-# exists, open or closed, isn't recreated, so closing one dismisses it.
+# versions.json is missing (scripts/check-versions.py), plus a PR "Update <engine>"
+# (branch versions/<engine>, one rolling PR per engine) with versions.json edited.
+# Merge the PR: the push builds the binaries, and README status then puts them in
+# catalog.json. To skip a version, close its issue (and the PR). An issue that
+# already exists, open or closed, isn't recreated.
 name: Check versions
 
 on:
@@ -9,8 +12,9 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   issues: write
+  pull-requests: write
 
 jobs:
   check:
@@ -23,22 +27,47 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/check-versions.py --self-test
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           gh label create new-version --color 0e8a16 --description "Vendor release to add" 2>/dev/null || true
           have=$(gh issue list --label new-version --state all --limit 1000 --json title -q '.[].title')
           python3 scripts/check-versions.py > missing.txt
           echo "### Issues" >> "$GITHUB_STEP_SUMMARY"
           [ -s missing.txt ] || echo "Nothing new." >> "$GITHUB_STEP_SUMMARY"
-          while read -r engine version kind; do
+          while read -r engine version kind <&3; do
             title="Add $engine $version"
             if grep -qxF "$title" <<<"$have"; then
               echo "- $title: issue already exists" >> "$GITHUB_STEP_SUMMARY"
               continue
             fi
             if [ "$kind" = patch ]; then
-              body="$engine $version is a new patch release of a line we ship. Replace the older patch of that line in \`versions.json\` (\`$engine.versions\`), then run the $engine workflow (version \`all\`)."
+              body="$engine $version is a new patch release of a line we ship. The \`versions/$engine\` PR replaces the older patch of that line; merge it to build and publish."
             else
-              body="$engine $version starts a release line we don't ship. Add it to \`versions.json\` (\`$engine.versions\`); close this issue to skip it."
+              body="$engine $version starts a release line we don't ship. The \`versions/$engine\` PR adds it; merge it to build and publish, or close this issue and the PR to skip it."
             fi
             url=$(gh issue create --title "$title" --label new-version --assignee sumantadotai --body "$body")
             echo "- $title: opened $url" >> "$GITHUB_STEP_SUMMARY"
-          done < missing.txt
+
+            # Add it to the engine's open PR, or start one from main.
+            branch="versions/$engine"
+            pr=$(gh pr list --head "$branch" --state open --json number -q '.[0].number')
+            if [ -n "$pr" ]; then
+              git fetch -q origin "$branch"
+              git checkout -q -B "$branch" FETCH_HEAD
+            else
+              git checkout -q -B "$branch" "$GITHUB_SHA"
+            fi
+            python3 scripts/check-versions.py --apply "$engine" "$version" "$kind"
+            git commit -qam "$engine: $version"
+            git push -qf origin "$branch"
+            if [ -n "$pr" ]; then
+              gh pr edit "$pr" --body "$(gh pr view "$pr" --json body -q .body)
+          Closes #${url##*/}"
+            else
+              pr=$(gh pr create --base main --head "$branch" --title "Update $engine" \
+                --body "Merge to build and publish (the push runs the build workflows; catalog.json follows).
+          Closes #${url##*/}")
+            fi
+            echo "  - PR: $pr" >> "$GITHUB_STEP_SUMMARY"
+            git checkout -q "$GITHUB_SHA"
+          done 3< missing.txt
