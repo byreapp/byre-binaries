@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-13T13:16:38Z",
+  "updated": "2026-11-16T13:36:37Z",
   "engines": [
     {
       "id": "postgres",
@@ -42,8 +42,8 @@
           "url": {
             "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-26.7.0/mysql-26.7.0-aarch64-apple-darwin.tar.gz",
             "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-26.7.0/mysql-26.7.0-x86_64-apple-darwin.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-26.7.0/mysql-26.7.0-aarch64-unknown-linux-gnu.tar.gz",
             "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-26.7.0/mysql-26.7.0-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-26.7.0/mysql-26.7.0-aarch64-unknown-linux-gnu.tar.gz",
             "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-26.7.0/mysql-26.7.0-x86_64-pc-windows-msvc.tar.gz"
           }
         },
@@ -64,8 +64,8 @@
           "url": {
             "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-aarch64-apple-darwin.tar.gz",
             "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-x86_64-apple-darwin.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-aarch64-unknown-linux-gnu.tar.gz",
             "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-aarch64-unknown-linux-gnu.tar.gz",
             "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mysql-9.5.0/mysql-9.5.0-x86_64-pc-windows-msvc.tar.gz"
           }
         },
@@ -92,8 +92,8 @@
           "url": {
             "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-13.0.2/mariadb-13.0.2-aarch64-apple-darwin.tar.gz",
             "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-13.0.2/mariadb-13.0.2-x86_64-apple-darwin.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-13.0.2/mariadb-13.0.2-aarch64-unknown-linux-gnu.tar.gz",
             "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-13.0.2/mariadb-13.0.2-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-13.0.2/mariadb-13.0.2-aarch64-unknown-linux-gnu.tar.gz",
             "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-13.0.2/mariadb-13.0.2-x86_64-pc-windows-msvc.tar.gz"
           }
         },
@@ -103,8 +103,8 @@
           "url": {
             "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-aarch64-apple-darwin.tar.gz",
             "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-x86_64-apple-darwin.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-aarch64-unknown-linux-gnu.tar.gz",
             "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-aarch64-unknown-linux-gnu.tar.gz",
             "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-x86_64-pc-windows-msvc.tar.gz"
           }
         },
@@ -114,8 +114,8 @@
           "url": {
             "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.8.9/mariadb-11.8.9-aarch64-apple-darwin.tar.gz",
             "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.8.9/mariadb-11.8.9-x86_64-apple-darwin.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.8.9/mariadb-11.8.9-aarch64-unknown-linux-gnu.tar.gz",
             "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.8.9/mariadb-11.8.9-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.8.9/mariadb-11.8.9-aarch64-unknown-linux-gnu.tar.gz",
             "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.8.9/mariadb-11.8.9-x86_64-pc-windows-msvc.tar.gz"
           }
         },
@@ -125,8 +125,8 @@
           "url": {
             "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.4.13/mariadb-11.4.13-aarch64-apple-darwin.tar.gz",
             "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.4.13/mariadb-11.4.13-x86_64-apple-darwin.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.4.13/mariadb-11.4.13-aarch64-unknown-linux-gnu.tar.gz",
             "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.4.13/mariadb-11.4.13-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.4.13/mariadb-11.4.13-aarch64-unknown-linux-gnu.tar.gz",
             "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-11.4.13/mariadb-11.4.13-x86_64-pc-windows-msvc.tar.gz"
           }
         },
@@ -136,8 +136,8 @@
           "url": {
             "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-aarch64-apple-darwin.tar.gz",
             "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-x86_64-apple-darwin.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-aarch64-unknown-linux-gnu.tar.gz",
             "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-aarch64-unknown-linux-gnu.tar.gz",
             "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-10.11.19/mariadb-10.11.19-x86_64-pc-windows-msvc.tar.gz"
           }
         }
@@ -149,35 +149,35 @@
       "versions": [
         {
           "major": "9.0",
-          "exact": "9.0.4",
+          "exact": "9.0.8",
           "url": {
-            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.4/mongodb-9.0.4-aarch64-apple-darwin.tar.gz",
-            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.4/mongodb-9.0.4-x86_64-apple-darwin.tar.gz",
-            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.4/mongodb-9.0.4-x86_64-unknown-linux-gnu.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.4/mongodb-9.0.4-aarch64-unknown-linux-gnu.tar.gz",
-            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.4/mongodb-9.0.4-x86_64-pc-windows-msvc.tar.gz"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.8/mongodb-9.0.8-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.8/mongodb-9.0.8-x86_64-apple-darwin.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.8/mongodb-9.0.8-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.8/mongodb-9.0.8-aarch64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-9.0.8/mongodb-9.0.8-x86_64-pc-windows-msvc.tar.gz"
           }
         },
         {
           "major": "8.0",
-          "exact": "8.0.34",
+          "exact": "8.0.38",
           "url": {
-            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.34/mongodb-8.0.34-aarch64-apple-darwin.tar.gz",
-            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.34/mongodb-8.0.34-x86_64-apple-darwin.tar.gz",
-            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.34/mongodb-8.0.34-x86_64-unknown-linux-gnu.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.34/mongodb-8.0.34-aarch64-unknown-linux-gnu.tar.gz",
-            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.34/mongodb-8.0.34-x86_64-pc-windows-msvc.tar.gz"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.38/mongodb-8.0.38-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.38/mongodb-8.0.38-x86_64-apple-darwin.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.38/mongodb-8.0.38-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.38/mongodb-8.0.38-aarch64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-8.0.38/mongodb-8.0.38-x86_64-pc-windows-msvc.tar.gz"
           }
         },
         {
           "major": "7.0",
-          "exact": "7.0.45",
+          "exact": "7.0.48",
           "url": {
-            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.45/mongodb-7.0.45-aarch64-apple-darwin.tar.gz",
-            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.45/mongodb-7.0.45-x86_64-apple-darwin.tar.gz",
-            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.45/mongodb-7.0.45-x86_64-unknown-linux-gnu.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.45/mongodb-7.0.45-aarch64-unknown-linux-gnu.tar.gz",
-            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.45/mongodb-7.0.45-x86_64-pc-windows-msvc.tar.gz"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.48/mongodb-7.0.48-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.48/mongodb-7.0.48-x86_64-apple-darwin.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.48/mongodb-7.0.48-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.48/mongodb-7.0.48-aarch64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-7.0.48/mongodb-7.0.48-x86_64-pc-windows-msvc.tar.gz"
           }
         }
       ]
@@ -222,13 +222,13 @@
       "versions": [
         {
           "major": "100",
-          "exact": "100.19.1",
+          "exact": "100.20.1",
           "url": {
-            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-aarch64-apple-darwin.tar.gz",
-            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-x86_64-apple-darwin.tar.gz",
-            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-x86_64-unknown-linux-gnu.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-aarch64-unknown-linux-gnu.tar.gz",
-            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.19.1/mongodb-tools-100.19.1-x86_64-pc-windows-msvc.tar.gz"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.20.1/mongodb-tools-100.20.1-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.20.1/mongodb-tools-100.20.1-x86_64-apple-darwin.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.20.1/mongodb-tools-100.20.1-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.20.1/mongodb-tools-100.20.1-aarch64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mongodb-tools-100.20.1/mongodb-tools-100.20.1-x86_64-pc-windows-msvc.tar.gz"
           }
         }
       ]
