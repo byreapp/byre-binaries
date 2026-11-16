@@ -24,6 +24,11 @@ on:
         description: Version in versions.json, or "all"
         default: all
 
+# One run per workflow at a time; a later one then skips what this one published.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
 

@@ -79,9 +79,16 @@ def missing(ours, theirs, n):
             yield v, "line"
 
 
-def apply(ours, v, kind, n):
-    """patch: replace the shipped version of v's line. line: insert v, keeping newest-first."""
+# MySQL innovation releases (year-numbered, 26.x): ship only the newest one.
+LATEST_ONLY = {"mysql": lambda v: key(v)[0] >= 26}
+
+
+def apply(ours, v, kind, n, engine=""):
+    """patch: replace the shipped version of v's line. line: insert v, keeping newest-first
+    (or, for a LATEST_ONLY series, replace the older release of that major)."""
     num = lambda x: re.fullmatch(r"[\d.]+", x)
+    if kind == "line" and LATEST_ONLY.get(engine, lambda v: False)(v):
+        kind, n = "patch", 1
     if kind == "patch":
         return [v if num(x) and key(x)[:n] == key(v)[:n] else x for x in ours]
     i = next((i for i, x in enumerate(ours) if num(x) and key(x) < key(v)), len(ours))
@@ -94,6 +101,8 @@ def self_test():
     assert list(missing(["18.6.0", "19beta4"], {"18.7.0", "19.0.0", "17.12.0"}, 1)) == [("18.7.0", "patch"), ("19.0.0", "line")]
     assert apply(["19beta4", "18.6.0", "17.11.0"], "17.12.0", "patch", 1) == ["19beta4", "18.6.0", "17.12.0"]
     assert apply(["26.7.0", "9.7.2"], "26.10.0", "line", 2) == ["26.10.0", "26.7.0", "9.7.2"]
+    assert apply(["26.7.0", "9.7.2", "9.5.0"], "26.10.0", "line", 2, "mysql") == ["26.10.0", "9.7.2", "9.5.0"]
+    assert apply(["9.7.2", "9.5.0"], "9.8.0", "line", 2, "mysql") == ["9.8.0", "9.7.2", "9.5.0"]
     assert apply(["19beta4", "18.6.0"], "20.0.0", "line", 1) == ["19beta4", "20.0.0", "18.6.0"]
     print("ok")
 
@@ -104,7 +113,7 @@ if __name__ == "__main__":
     if sys.argv[1:2] == ["--apply"]:
         engine, v, kind = sys.argv[2:5]
         versions = json.load(open("versions.json"))
-        versions[engine]["versions"] = apply(versions[engine]["versions"], v, kind, UPSTREAM[engine][1])
+        versions[engine]["versions"] = apply(versions[engine]["versions"], v, kind, UPSTREAM[engine][1], engine)
         open("versions.json", "w").write(json.dumps(versions, indent=2) + "\n")
         sys.exit()
     versions = json.load(open("versions.json"))
