@@ -32,6 +32,13 @@ for f in $(elfs); do
   for e in ${old//:/ }; do
     if [[ $e == '$ORIGIN'* && $e != "$rp" ]]; then rp="$rp:$e"; fi
   done
+  # MySQL's bundled libs (icu, protobuf) live in lib/private; some of its installs
+  # (26.x component_mysql_rest_service) clear their RUNPATH, so always add it.
+  if [ -d "$lib/private" ]; then
+    pr=$(realpath --relative-to="$(dirname "$f")" "$lib/private")
+    p='$ORIGIN'; [ "$pr" = . ] || p="\$ORIGIN/$pr"
+    [[ ":$rp:" == *":$p:"* ]] || rp="$rp:$p"
+  fi
   patchelf --set-rpath "$rp" "$f"
 done
 
