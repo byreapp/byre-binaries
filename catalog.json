@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T20:15:05Z",
+  "updated": "2026-11-21T20:29:18Z",
   "engines": [
     {
       "id": "postgres",
@@ -589,6 +589,7 @@
       ],
       "platforms": [
         "macos-arm64",
+        "macos-x64",
         "linux-x64",
         "linux-arm64",
         "windows-x64"
