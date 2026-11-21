@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T19:56:18Z",
+  "updated": "2026-11-21T19:59:23Z",
   "engines": [
     {
       "id": "postgres",
@@ -568,6 +568,23 @@
         "macos-x64",
         "linux-x64",
         "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "postgis",
+      "title": "PostGIS",
+      "version": "3.7.0",
+      "description": "Geospatial types, indexes and functions (with postgis_topology)",
+      "source": "https://github.com/postgis/postgis",
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-postgis-3.7.0/postgis-3.7.0-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
         "windows-x64"
       ]
     }
