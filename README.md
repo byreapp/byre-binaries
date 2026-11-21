@@ -129,6 +129,48 @@ from `versions.json`, `extensions.json` and the published releases by
 <tr><td rowspan="3"><a href="https://github.com/byreapp/byre-binaries/releases/tag/ext-timescaledb-2.32.1">timescaledb 2.32.1</a></td><td>16</td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg16-macos-arm64.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg16-macos-x64.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg16-linux-x64.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg16-linux-arm64.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg16-windows-x64.tar.gz">✅</a></td></tr>
 <tr><td>17</td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg17-macos-arm64.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg17-macos-x64.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg17-linux-x64.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg17-linux-arm64.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg17-windows-x64.tar.gz">✅</a></td></tr>
 <tr><td>18</td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg18-macos-arm64.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg18-macos-x64.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg18-linux-x64.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg18-linux-arm64.tar.gz">✅</a></td><td><a href="https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg18-windows-x64.tar.gz">✅</a></td></tr>
+<tr><td rowspan="6"><a href="https://github.com/byreapp/byre-binaries/releases/tag/ext-plpgsql_check-2.11.0">plpgsql_check 2.11.0</a></td><td>14</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>15</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>16</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>17</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>18</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>19</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td rowspan="6"><a href="https://github.com/byreapp/byre-binaries/releases/tag/ext-pgtap-1.3.4">pgtap 1.3.4</a></td><td>14</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>15</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>16</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>17</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>18</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>19</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td rowspan="6"><a href="https://github.com/byreapp/byre-binaries/releases/tag/ext-pgmq-1.13.2">pgmq 1.13.2</a></td><td>14</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>15</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>16</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>17</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>18</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>19</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td rowspan="6"><a href="https://github.com/byreapp/byre-binaries/releases/tag/ext-pg_hint_plan-1.9.0">pg_hint_plan 1.9.0</a></td><td>14</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>15</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>16</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>17</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>18</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>19</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td rowspan="6"><a href="https://github.com/byreapp/byre-binaries/releases/tag/ext-pgaudit-19.0">pgaudit 19.0</a></td><td>14</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>15</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>16</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>17</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>18</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>19</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td rowspan="6"><a href="https://github.com/byreapp/byre-binaries/releases/tag/ext-pg_repack-1.5.3">pg_repack 1.5.3</a></td><td>14</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>15</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>16</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>17</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>18</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>19</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td rowspan="6"><a href="https://github.com/byreapp/byre-binaries/releases/tag/ext-pg_hashids-1.2.1">pg_hashids 1.2.1</a></td><td>14</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>15</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>16</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>17</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>18</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>19</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
 </table>
 <!-- status:end -->
 
