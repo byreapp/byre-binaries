@@ -140,7 +140,9 @@ jobs:
             elif [ "$RUNNER_OS" = Windows ] && [ -f "$src/Makefile.win" ]; then
               # Makefile.win installs straight into PGROOT. "-" options: Git Bash
               # would rewrite "/F" into a path.
-              (cd "$src" && PGROOT="$(cygpath -w "$root")" nmake -NOLOGO -f Makefile.win clean all install)
+              # PG 18+ headers need C11 (_Noreturn, alignas); CL = extra cl.exe options.
+              cl=; [ -f "$root/include/server/optimizer/extendplan.h" ] && cl=-std:c11
+              (cd "$src" && CL="$cl" PGROOT="$(cygpath -w "$root")" nmake -NOLOGO -f Makefile.win clean all install)
             elif [ "$RUNNER_OS" = Windows ]; then
               scripts/build-ext-windows.sh "$src" "$root"
             elif [ "$build" = cmake ]; then
