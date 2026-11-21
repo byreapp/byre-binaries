@@ -213,7 +213,9 @@ jobs:
             [ "$build" != postgis ] || scripts/build-postgis.sh test "dist/$EXT-$ver-pg$m-$BYRE_PLATFORM.tar.gz" pg.tgz
           done
           ls -l dist
+      # Even if a later major failed: the ones before it are fine to publish.
       - uses: actions/upload-artifact@v7
+        if: always()
         with:
           name: ${{ matrix.ext }}-${{ matrix.target.platform }}
           path: dist/*.tar.gz
