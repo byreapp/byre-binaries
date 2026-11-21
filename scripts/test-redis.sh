@@ -5,6 +5,8 @@ engine=$1 tarball=$(cd "$(dirname "$2")" && pwd)/$(basename "$2")
 dir=$(mktemp -d)
 tar xzf "$tarball" -C "$dir"
 bin=$(echo "$dir"/*/bin)
+# Windows: a missing DLL makes the .exe exit 127 silently; list what it links.
+[[ $(uname -s) == MSYS* ]] && { ls "$bin"; ldd "$bin/$engine-server.exe" || true; cygcheck "$bin/$engine-server.exe" || true; }
 "$bin/$engine-server" --version
 "$bin/$engine-server" --port 63799 --daemonize yes --dir "$dir" --logfile "$dir/log"
 trap '"$bin/$engine-cli" -p 63799 shutdown nosave || true' EXIT
