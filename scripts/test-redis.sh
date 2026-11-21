@@ -6,7 +6,7 @@ dir=$(mktemp -d)
 tar xzf "$tarball" -C "$dir"
 bin=$(echo "$dir"/*/bin)
 # Windows: a missing DLL makes the .exe exit 127 silently; list what it links.
-[[ $(uname -s) == MSYS* ]] && { ls "$bin"; ldd "$bin/$engine-server.exe" || true; cygcheck "$bin/$engine-server.exe" || true; }
+[[ $(uname -s) == MSYS* ]] && { ls "$bin"; ldd "$bin/$engine-server.exe" || true; cygcheck "$bin/$engine-server.exe" || true; pacman -Q msys2-runtime msys2-runtime-devel gcc || true; powershell -NoProfile -c "& '$(cygpath -w "$bin/$engine-server.exe")' --version; 'NTSTATUS: 0x{0:X8}' -f \$LASTEXITCODE" || true; }
 "$bin/$engine-server" --version
 "$bin/$engine-server" --port 63799 --daemonize yes --dir "$dir" --logfile "$dir/log"
 trap '"$bin/$engine-cli" -p 63799 shutdown nosave || true' EXIT
