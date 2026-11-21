@@ -31,11 +31,18 @@ big=$(var MODULE_big)
 w=$(cygpath -m "$root")
 cflags=(-nologo -O2 -MD -fp:fast -I"$w/include/server/port/win32_msvc" -I"$w/include/server/port/win32"
   -I"$w/include/server" -I"$w/include" -I"$(cygpath -m "$src")" -FI"$(cygpath -m "$here/msvc-compat.h")")
-for f in $(var PG_CPPFLAGS); do
-  [[ $f == -I?* ]] && cflags+=(-I"$(cygpath -m "$src/${f#-I}")")
+# eval: PG_CPPFLAGS is shell-quoted (pgaudit: -DPGAUDIT_VERSION="\"19.0\"").
+eval "cppflags=($(var PG_CPPFLAGS))"
+for f in "${cppflags[@]}"; do
+  case $f in
+    -I?*) cflags+=(-I"$(cygpath -m "$src/${f#-I}")") ;;
+    -D?*) cflags+=("$f") ;;
+  esac
 done
-# Same rule as pgvector's Makefile.win: 18+ headers need C11.
-[ -f "$root/include/server/optimizer/extendplan.h" ] && cflags+=(-std:c11)
+# Same rule as pgvector's Makefile.win: 18+ headers need C11 (and its conforming
+# preprocessor, for PG_MODULE_MAGIC_DATA's __VA_ARGS__).
+pgnum=$(sed -n 's/^#define PG_VERSION_NUM //p' "$root/include/server/pg_config.h" | tr -d '\r')
+[ "$pgnum" -ge 180000 ] && cflags+=(-std:c11)
 # MSVC has no ssize_t; code that skips postgres.h (pg_hashids) uses it bare.
 cflags+=(-Dssize_t=intptr_t)
 # Git's coreutils `link` would shadow MSVC's.
@@ -48,6 +55,8 @@ dll() {
   local name=$1 o objs=() ; shift
   for c in "$@"; do
     o="${c%.c}.obj"
+    # Scanners PGXS would generate with flex (pg_hint_plan's query_scan.c).
+    [ -f "$src/$c" ] || [ ! -f "$src/${c%.c}.l" ] || win_flex -o "$src/$c" "$src/${c%.c}.l"
     "$msvc/cl.exe" "${cflags[@]}" -c "$(cygpath -m "$src/$c")" -Fo"$(cygpath -m "$src/$o")"
     objs+=("$(cygpath -m "$src/$o")")
   done

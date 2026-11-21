@@ -341,7 +341,8 @@
         "linux-x64",
         "linux-arm64",
         "windows-x64"
-      ]
+      ],
+      "prepare": "perl -pi -e 's/^extern Datum id_/extern PGDLLEXPORT Datum id_/' pg_hashids.c"
     }
   ]
 }

@@ -89,8 +89,11 @@ jobs:
           set >> "%GITHUB_ENV%"
       - if: runner.os == 'Windows'
         run: |
-          choco install make -y --no-progress # reads PGXS Makefiles (build-ext-windows.sh)
+          choco install make winflexbison3 -y --no-progress # reads PGXS Makefiles, generates scanners (build-ext-windows.sh)
           python -m pip install -q ninja # timescaledb: no cmd.exe 8 KB command-line cap
+      # theseus' Linux build has GSSAPI on, so libpq-be.h (pgaudit) includes gssapi.h.
+      - if: runner.os == 'Linux'
+        run: sudo apt-get install -yq libkrb5-dev
       - name: Build for every Postgres major
         run: |
           set -euo pipefail
@@ -124,6 +127,8 @@ jobs:
             tar xzf src.tgz -C "$base" --strip-components=1 || [ "$RUNNER_OS" = Windows ]
             src=$(cd "$base/$subdir" && pwd)
             fetched=$1
+            # "prepare": a source fix-up run in $src (pg_hashids: PGDLLEXPORT for MSVC).
+            p=$(jq -r '.prepare // ""' <<<"$ext"); [ -z "$p" ] || (cd "$src" && eval "$p")
           }
           for m in $(jq -r '.majors[]' <<<"$ext"); do
             [ "$MAJORS" = all ] || [[ " $MAJORS " == *" $m "* ]] || continue
@@ -155,7 +160,7 @@ jobs:
               # Makefile.win installs straight into PGROOT. "-" options: Git Bash
               # would rewrite "/F" into a path.
               # PG 18+ headers need C11 (_Noreturn, alignas); CL = extra cl.exe options.
-              cl=; [ -f "$root/include/server/optimizer/extendplan.h" ] && cl=-std:c11
+              cl=; grep -qE "PG_VERSION_NUM (1[89]|[2-9][0-9])" "$root/include/server/pg_config.h" && cl=-std:c11
               # Our own builds (PG 19+) have no gettext; pg_cron's Makefile.win links libintl unconditionally.
               [ -f "$root/lib/libintl.lib" ] || sed -i 's/"$(LIBDIR)\\libintl.lib"//' "$src/Makefile.win"
               (cd "$src" && CL="$cl" PGROOT="$(cygpath -w "$root")" nmake -NOLOGO -f Makefile.win clean all install)
