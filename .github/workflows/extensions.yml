@@ -186,9 +186,9 @@ jobs:
               extra=()
               [ "$RUNNER_OS" = macOS ] && extra+=(CC=clang "PG_SYSROOT=$(xcrun --show-sdk-path)")
               [ "$RUNNER_OS" = Linux ] && extra+=('PG_LDFLAGS=-Wl,-rpath,$$ORIGIN')
-              make -C "$src" PG_CONFIG="$cfg" clean >/dev/null # objects from the previous major
-              make -C "$src" PG_CONFIG="$cfg" OPTFLAGS="" "${extra[@]}" -j4
-              make -C "$src" PG_CONFIG="$cfg" install
+              make -C "$src" PG_CONFIG="$cfg" USE_PGXS=1 clean >/dev/null # objects from the previous major
+              make -C "$src" PG_CONFIG="$cfg" USE_PGXS=1 OPTFLAGS="" "${extra[@]}" -j4
+              make -C "$src" PG_CONFIG="$cfg" USE_PGXS=1 install
             fi
             after=$(cd "$root" && find lib share/extension -type f | sort)
             comm -13 <(echo "$before") <(echo "$after") > added.txt

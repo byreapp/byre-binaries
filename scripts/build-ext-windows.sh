@@ -17,7 +17,8 @@ shim=$(cygpath -m "$(mktemp -d)")
 printf '#!/bin/sh\n[ "$1" = --pgxs ] && { echo "%s"; exit 0; }\nexec "%s" "$@"\n' \
   "$(cygpath -m "$here/pgxs-vars.mk")" "$root/bin/pg_config.exe" > "$shim/pg_config"
 chmod +x "$shim/pg_config"
-mk() { make -s -C "$src" PG_CONFIG="$shim/pg_config" "$@"; }
+# USE_PGXS=1: Makefiles that also build in-tree (pgaudit) only use PGXS when it is set.
+mk() { make -s -C "$src" PG_CONFIG="$shim/pg_config" USE_PGXS=1 "$@"; }
 
 vars=$(mk byre-vars | tr -d '\r')
 var() { sed -n "s/^$1=//p" <<<"$vars"; }
@@ -35,6 +36,8 @@ for f in $(var PG_CPPFLAGS); do
 done
 # Same rule as pgvector's Makefile.win: 18+ headers need C11.
 [ -f "$root/include/server/optimizer/extendplan.h" ] && cflags+=(-std:c11)
+# MSVC has no ssize_t; code that skips postgres.h (pg_hashids) uses it bare.
+cflags+=(-Dssize_t=intptr_t)
 # Git's coreutils `link` would shadow MSVC's.
 msvc="$(cygpath -u "$VCToolsInstallDir")/bin/Hostx64/x64"
 
