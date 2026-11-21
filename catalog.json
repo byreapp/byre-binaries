@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-16T20:07:01Z",
+  "updated": "2026-11-21T15:57:59Z",
   "engines": [
     {
       "id": "postgres",
@@ -7,8 +7,7 @@
       "versions": [
         {
           "major": "19",
-          "exact": "19.0.0-beta4",
-          "beta": true
+          "exact": "19.0.0"
         },
         {
           "major": "18",
