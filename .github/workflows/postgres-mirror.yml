@@ -28,6 +28,8 @@ jobs:
           for exact in $(jq -r '.postgres.versions[] | select(test("^[0-9.]+$"))' versions.json); do
             tag="pg-$exact"
             if gh release view "$tag" >/dev/null 2>&1; then echo "$tag already mirrored"; continue; fi
+            # theseus stopped at 18: newer majors exist only as this repo's postgres-<exact> builds.
+            if ! gh release view "$exact" -R theseus-rs/postgresql-binaries >/dev/null 2>&1; then echo "theseus has no $exact, skipping"; continue; fi
             rm -rf dl && mkdir dl
             for t in $triples; do
               f="postgresql-$exact-$t.tar.gz"

@@ -61,10 +61,11 @@ out += grouped(["Engine", "Version", *PLATFORMS], [
     for engine, spec in versions.items()])
 
 out += ["", "#### Postgres mirror (theseus, what Byre 0.3.0 downloads)", "", "| Version " + HEAD, "|---|" + "---|" * len(PLATFORMS)]
-for pg in exts["postgres"]:
-    tag = f"pg-{pg['exact']}"
-    cells = [cell(tag, f"postgresql-{pg['exact']}-{t}.tar.gz", True) for t in PLATFORMS.values()]
-    out.append(f"| [{pg['exact']}](https://github.com/{REPO}/releases/tag/{tag}) | " + " | ".join(cells) + " |")
+# Rows = what's mirrored (theseus has no 19+, so those never get a row).
+for exact in sorted((t[3:] for t in assets if t.startswith("pg-")), key=lambda v: [int(x) for x in v.split(".")], reverse=True):
+    tag = f"pg-{exact}"
+    cells = [cell(tag, f"postgresql-{exact}-{t}.tar.gz", True) for t in PLATFORMS.values()]
+    out.append(f"| [{exact}](https://github.com/{REPO}/releases/tag/{tag}) | " + " | ".join(cells) + " |")
 
 out += ["", "#### Postgres extensions", ""]
 groups = []
