@@ -38,7 +38,10 @@ for f in "${cppflags[@]}"; do
   case $f in
     -I?*) cflags+=(-I"$(cygpath -m "$src/${f#-I}")") ;;
     # Into a header: quoted values don't survive MSYS -> cl command-line quoting.
-    -D?*) d=${f#-D}; [[ $d == *=* ]] || d="$d=1"; printf '#define %s %s\n' "${d%%=*}" "${d#*=}" >> "$src/byre-defs.h" ;;
+    # Windows make hands the quoting over raw (\"19.0\"): strip it, re-quote strings.
+    -D?*) d=${f#-D}; [[ $d == *=* ]] || d="$d=1"; v=${d#*=}; q=${v//[\\\"]/}
+          [ "$q" = "$v" ] || q="\"$q\""
+          printf '#define %s %s\n' "${d%%=*}" "$q" >> "$src/byre-defs.h" ;;
   esac
 done
 [ -f "$src/byre-defs.h" ] && cflags+=(-FI"$(cygpath -m "$src/byre-defs.h")")
