@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T20:03:24Z",
+  "updated": "2026-11-21T20:06:33Z",
   "engines": [
     {
       "id": "postgres",
@@ -580,13 +580,21 @@
       "source": "https://github.com/postgis/postgis",
       "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-postgis-3.7.0/postgis-3.7.0-pg{major}-{platform}.tar.gz",
       "majors": [
+        "14",
+        "15",
         "16",
         "17",
         "18",
         "19"
       ],
       "platforms": [
+        "linux-x64",
+        "linux-arm64",
         "windows-x64"
+      ],
+      "skip": [
+        "pg14-windows-x64",
+        "pg15-windows-x64"
       ]
     }
   ]
