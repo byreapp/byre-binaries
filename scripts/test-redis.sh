@@ -7,7 +7,7 @@ tar xzf "$tarball" -C "$dir"
 bin=$(echo "$dir"/*/bin)
 # Windows: launch through cmd, like Byre does (a native parent). Since msys2-runtime
 # 3.6.12 an .exe with its bundled msys-2.0.dll exits 127 when started from MSYS bash.
-run() { if [[ $(uname -s) == MSYS* ]]; then cmd //c "$(cygpath -w "$1").exe" "${@:2}"; else "$@"; fi; }
+run() { if [[ $(uname -s) == MSYS* ]]; then cmd //c "$(cygpath -w "$1")" "${@:2}"; else "$@"; fi; }
 run "$bin/$engine-server" --version
 run "$bin/$engine-server" --port 63799 --daemonize yes --dir "$dir" --logfile "$dir/log"
 trap 'run "$bin/$engine-cli" -p 63799 shutdown nosave || true' EXIT
