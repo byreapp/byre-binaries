@@ -9,9 +9,10 @@ bin=$(echo "$dir"/*/bin)
 # 3.6.12 an .exe with its bundled msys-2.0.dll exits 127 when started from MSYS bash.
 run() { if [[ $(uname -s) == MSYS* ]]; then cmd //c "$(cygpath -w "$1")" "${@:2}"; else "$@"; fi; }
 run "$bin/$engine-server" --version
-run "$bin/$engine-server" --port 63799 --daemonize yes --dir "$dir" --logfile "$dir/log"
-trap 'run "$bin/$engine-cli" -p 63799 shutdown nosave || true' EXIT
+# Foreground in the background, like Byre (daemonize no): forking is fragile on Windows.
+run "$bin/$engine-server" --port 63799 --daemonize no --dir "$dir" --logfile "$dir/log" &
+trap 's=$?; [ $s -eq 0 ] || cat "$dir/log" 2>/dev/null; run "$bin/$engine-cli" -p 63799 shutdown nosave >/dev/null 2>&1 || true; wait || true; exit $s' EXIT
 for _ in $(seq 20); do run "$bin/$engine-cli" -p 63799 ping 2>/dev/null | grep -q PONG && break; sleep 0.5; done
 run "$bin/$engine-cli" -p 63799 set byre ok
-[ "$(run "$bin/$engine-cli" -p 63799 get byre | tr -d '\r')" = ok ] || { cat "$dir/log"; exit 1; }
+[ "$(run "$bin/$engine-cli" -p 63799 get byre | tr -d '\r')" = ok ] || exit 1
 echo "$engine OK"
