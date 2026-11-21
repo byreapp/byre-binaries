@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T19:41:52Z",
+  "updated": "2026-11-21T19:42:06Z",
   "engines": [
     {
       "id": "postgres",
@@ -397,6 +397,29 @@
         "16",
         "17",
         "18"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "pgtap",
+      "title": "pgTAP",
+      "version": "1.3.4",
+      "description": "Unit testing framework for Postgres, written in SQL",
+      "source": "https://github.com/theory/pgtap",
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-pgtap-1.3.4/pgtap-1.3.4-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
       ],
       "platforms": [
         "macos-arm64",
