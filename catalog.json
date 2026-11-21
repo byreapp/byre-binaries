@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T19:34:59Z",
+  "updated": "2026-11-21T19:41:52Z",
   "engines": [
     {
       "id": "postgres",
@@ -404,6 +404,74 @@
         "linux-x64",
         "linux-arm64",
         "windows-x64"
+      ]
+    },
+    {
+      "name": "pgmq",
+      "title": "PGMQ",
+      "version": "1.13.2",
+      "description": "Lightweight message queue (like SQS) on Postgres tables",
+      "source": "https://github.com/pgmq/pgmq",
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-pgmq-1.13.2/pgmq-1.13.2-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "pg_hint_plan",
+      "title": "pg_hint_plan",
+      "version": "1.9.0",
+      "description": "Steer query plans with hints in SQL comments",
+      "source": "https://github.com/ossc-db/pg_hint_plan",
+      "preload": true,
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-pg_hint_plan-1.9.0/pg_hint_plan-1.9.0-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64"
+      ]
+    },
+    {
+      "name": "pg_hashids",
+      "title": "pg_hashids",
+      "version": "1.2.1",
+      "description": "Short, unique, non-sequential ids from numbers (Hashids)",
+      "source": "https://github.com/iCyberon/pg_hashids",
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-pg_hashids-1.2.1/pg_hashids-1.2.1-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64"
       ]
     }
   ]
