@@ -61,7 +61,7 @@
   },
   "valkey": {
     "versions": [
-      "9.1.3"
+      "9.1.4"
     ],
     "platforms": [
       "macos-arm64",
