@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T19:30:20Z",
+  "updated": "2026-11-21T19:34:59Z",
   "engines": [
     {
       "id": "postgres",
@@ -388,11 +388,11 @@
     {
       "name": "timescaledb",
       "title": "TimescaleDB",
-      "version": "2.30.2",
+      "version": "2.32.1",
       "description": "Time-series hypertables and continuous aggregates (Apache-2 edition)",
       "source": "https://github.com/timescale/timescaledb",
       "preload": true,
-      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.30.2/timescaledb-2.30.2-pg{major}-{platform}.tar.gz",
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-timescaledb-2.32.1/timescaledb-2.32.1-pg{major}-{platform}.tar.gz",
       "majors": [
         "16",
         "17",
