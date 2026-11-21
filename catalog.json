@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T19:46:36Z",
+  "updated": "2026-11-21T19:46:46Z",
   "engines": [
     {
       "id": "postgres",
@@ -496,6 +496,27 @@
         "macos-x64",
         "linux-x64",
         "linux-arm64"
+      ]
+    },
+    {
+      "name": "pgaudit",
+      "title": "pgAudit",
+      "version": "19.0",
+      "description": "Detailed session and object audit logging",
+      "source": "https://github.com/pgaudit/pgaudit",
+      "preload": true,
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-pgaudit-19.0/pgaudit-19.0-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64"
       ]
     },
     {
