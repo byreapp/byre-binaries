@@ -55,7 +55,7 @@ jobs:
               git fetch -q origin "$branch"
               git checkout -q -B "$branch" FETCH_HEAD
             else
-              git checkout -q -B "$branch" "$GITHUB_SHA"
+              git fetch -q origin main && git checkout -q -B "$branch" FETCH_HEAD  # fresh main: a branch cut from a stale run SHA reverted #25 via #28
             fi
             python3 scripts/check-versions.py --apply "$engine" "$version" "$kind"
             git commit -qam "$engine: $version"

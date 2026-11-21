@@ -91,6 +91,9 @@ jobs:
         if: runner.os == 'Windows'
         with:
           msystem: MSYS
+          # Keep msys2-runtime in step with msys2-runtime-devel (pulled in by gcc);
+          # a stale runtime DLL makes the built .exe fail to start (exit 127).
+          update: true
           install: gcc make pkgconf curl tar gzip
       - name: Build
         run: scripts/build-redis.sh "$ENGINE" "$VERSION" "out/$NAME"
