@@ -33,12 +33,15 @@ cflags=(-nologo -O2 -MD -fp:fast -I"$w/include/server/port/win32_msvc" -I"$w/inc
   -I"$w/include/server" -I"$w/include" -I"$(cygpath -m "$src")" -FI"$(cygpath -m "$here/msvc-compat.h")")
 # eval: PG_CPPFLAGS is shell-quoted (pgaudit: -DPGAUDIT_VERSION="\"19.0\"").
 eval "cppflags=($(var PG_CPPFLAGS))"
+rm -f "$src/byre-defs.h"
 for f in "${cppflags[@]}"; do
   case $f in
     -I?*) cflags+=(-I"$(cygpath -m "$src/${f#-I}")") ;;
-    -D?*) cflags+=("$f") ;;
+    # Into a header: quoted values don't survive MSYS -> cl command-line quoting.
+    -D?*) d=${f#-D}; [[ $d == *=* ]] || d="$d=1"; printf '#define %s %s\n' "${d%%=*}" "${d#*=}" >> "$src/byre-defs.h" ;;
   esac
 done
+[ -f "$src/byre-defs.h" ] && cflags+=(-FI"$(cygpath -m "$src/byre-defs.h")")
 # Same rule as pgvector's Makefile.win: 18+ headers need C11 (and its conforming
 # preprocessor, for PG_MODULE_MAGIC_DATA's __VA_ARGS__).
 pgnum=$(sed -n 's/^#define PG_VERSION_NUM //p' "$root/include/server/pg_config.h" | tr -d '\r')

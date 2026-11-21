@@ -319,7 +319,8 @@
         "linux-arm64",
         "windows-x64"
       ],
-      "subdir": "lib"
+      "subdir": "lib",
+      "prepare": "perl -0pi -e 's/(#undef PG_MODULE_MAGIC\\n.*?extern int no_such_variable\\n)/#if PG_VERSION_NUM < 180000\\n$1#endif\\n/s' pgut/pgut-be.h"
     },
     {
       "name": "pg_hashids",
