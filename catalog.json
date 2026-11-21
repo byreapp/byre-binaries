@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T18:27:49Z",
+  "updated": "2026-11-21T18:58:36Z",
   "engines": [
     {
       "id": "postgres",
@@ -98,13 +98,13 @@
         },
         {
           "major": "12.3",
-          "exact": "12.3.3",
+          "exact": "12.3.4",
           "url": {
-            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-aarch64-apple-darwin.tar.gz",
-            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-x86_64-apple-darwin.tar.gz",
-            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-x86_64-unknown-linux-gnu.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-aarch64-unknown-linux-gnu.tar.gz",
-            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.3/mariadb-12.3.3-x86_64-pc-windows-msvc.tar.gz"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.4/mariadb-12.3.4-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.4/mariadb-12.3.4-x86_64-apple-darwin.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.4/mariadb-12.3.4-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.4/mariadb-12.3.4-aarch64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/mariadb-12.3.4/mariadb-12.3.4-x86_64-pc-windows-msvc.tar.gz"
           }
         },
         {
@@ -204,13 +204,13 @@
       "versions": [
         {
           "major": "9.1",
-          "exact": "9.1.3",
+          "exact": "9.1.4",
           "url": {
-            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.3/valkey-9.1.3-aarch64-apple-darwin.tar.gz",
-            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.3/valkey-9.1.3-x86_64-apple-darwin.tar.gz",
-            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.3/valkey-9.1.3-x86_64-unknown-linux-gnu.tar.gz",
-            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.3/valkey-9.1.3-aarch64-unknown-linux-gnu.tar.gz",
-            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.3/valkey-9.1.3-x86_64-pc-windows-msvc.tar.gz"
+            "macos-arm64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.4/valkey-9.1.4-aarch64-apple-darwin.tar.gz",
+            "macos-x64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.4/valkey-9.1.4-x86_64-apple-darwin.tar.gz",
+            "linux-x64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.4/valkey-9.1.4-x86_64-unknown-linux-gnu.tar.gz",
+            "linux-arm64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.4/valkey-9.1.4-aarch64-unknown-linux-gnu.tar.gz",
+            "windows-x64": "https://github.com/byreapp/byre-binaries/releases/download/valkey-9.1.4/valkey-9.1.4-x86_64-pc-windows-msvc.tar.gz"
           }
         }
       ]
