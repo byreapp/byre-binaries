@@ -25,9 +25,16 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          scripts/readme-status.py
-          git diff --quiet README.md catalog.json && exit 0
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -qm "Refresh build status and catalog" README.md catalog.json
-          git pull -q --rebase && git push -q
+          # Both files are generated from the releases, so never merge them:
+          # regenerate on the newest main and retry if another push wins the race.
+          for _ in 1 2 3 4 5; do
+            git fetch -q origin main && git reset -q --hard FETCH_HEAD
+            scripts/readme-status.py
+            git diff --quiet README.md catalog.json && exit 0
+            git commit -qm "Refresh build status and catalog" README.md catalog.json
+            git push -q origin HEAD:main && exit 0
+            sleep 5
+          done
+          exit 1
