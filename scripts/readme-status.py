@@ -100,9 +100,10 @@ for e in exts["extensions"]:
         continue
     majors = [m for m in e["majors"] if any((m, p) in have for p in PLATFORMS)]
     plats = [p for p in PLATFORMS if any((m, p) in have for m in majors)]
-    entry = {"name": n, "title": prev.get("title", n), "version": v,
-             "description": prev.get("description", ""), "source": e["source"]}
-    if prev.get("preload"):
+    # title/description/preload: extensions.json for new entries, else what the catalog had.
+    entry = {"name": n, "title": e.get("title") or prev.get("title", n), "version": v,
+             "description": e.get("description") or prev.get("description", ""), "source": e["source"]}
+    if e.get("preload") or prev.get("preload"):
         entry["preload"] = True
     entry |= {"url": f"https://github.com/{REPO}/releases/download/{tag}/{n}-{v}-pg{{major}}-{{platform}}.tar.gz",
               "majors": majors, "platforms": plats}

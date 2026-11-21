@@ -104,20 +104,34 @@ jobs:
           if ! jq -e --arg p "$BYRE_PLATFORM" '.platforms | index($p)' <<<"$ext" >/dev/null; then
             echo "$EXT isn't built for $BYRE_PLATFORM"; exit 0
           fi
-          # Tags are v1.2.3 for most projects, bare 1.2.3 for some (hypopg, timescaledb).
           # Windows: a short path, so timescaledb's long `cat` command lines fit.
-          src=src; [ "$RUNNER_OS" = Windows ] && src=/d/s
-          mkdir "$src"
-          curl -fsSL "$repo/archive/refs/tags/v$ver.tar.gz" -o src.tgz ||
-            curl -fsSL "$repo/archive/refs/tags/$ver.tar.gz" -o src.tgz
-          # Windows tar can't make symlinks to files it hasn't extracted yet;
-          # only test fixtures (timescaledb) are symlinks.
-          tar xzf src.tgz -C "$src" --strip-components=1 || [ "$RUNNER_OS" = Windows ]
-          src=$(cd "$src" && pwd)
+          base=$PWD/src; [ "$RUNNER_OS" = Windows ] && base=/d/s
+          subdir=$(jq -r '.subdir // ""' <<<"$ext") # pgmq: the extension is pgmq-extension/
+          fetched=-
+          # fetch <tag>: unpack that source tag into $base (once per tag) and set $src.
+          # No tag: v1.2.3 for most projects, bare 1.2.3 for some (hypopg, timescaledb).
+          fetch() {
+            [ "$1" = "$fetched" ] && return
+            rm -rf "$base" src.tgz && mkdir -p "$base"
+            if [ -n "$1" ]; then
+              curl -fsSL "$repo/archive/refs/tags/$1.tar.gz" -o src.tgz
+            else
+              curl -fsSL "$repo/archive/refs/tags/v$ver.tar.gz" -o src.tgz ||
+                curl -fsSL "$repo/archive/refs/tags/$ver.tar.gz" -o src.tgz
+            fi
+            # Windows tar can't make symlinks to files it hasn't extracted yet;
+            # only test fixtures (timescaledb) are symlinks.
+            tar xzf src.tgz -C "$base" --strip-components=1 || [ "$RUNNER_OS" = Windows ]
+            src=$(cd "$base/$subdir" && pwd)
+            fetched=$1
+          }
           for m in $(jq -r '.majors[]' <<<"$ext"); do
             [ "$MAJORS" = all ] || [[ " $MAJORS " == *" $m "* ]] || continue
             # Combos that don't build (pg_ivm needs globals 14 doesn't export on Windows).
             jq -e --arg k "pg$m-$BYRE_PLATFORM" '.skip // [] | index($k)' <<<"$ext" >/dev/null && continue
+            # "tags": a source tag per major (pg_hint_plan, pgaudit release one line per major);
+            # "tag": one non-standard tag (pg_repack's ver_1.5.3).
+            fetch "$(jq -r --arg m "$m" '.tags[$m] // .tag // ""' <<<"$ext")"
             exact=$(jq -r --arg m "$m" '.postgres[] | select(.major == $m) | .exact' extensions.json)
             rm -rf pg out added.txt && mkdir pg
             # theseus stopped at 18; newer majors only exist as this repo's source builds
@@ -179,7 +193,8 @@ jobs:
             after=$(cd "$root" && find lib share/extension -type f | sort)
             comm -13 <(echo "$before") <(echo "$after") > added.txt
             mkdir out && tar cf - -C "$root" -T added.txt | tar xf - -C out
-            ls out/lib/* out/share/extension/"$EXT".control >/dev/null # fail if nothing was built
+            ls out/share/extension/"$EXT".control >/dev/null # fail if nothing was installed
+            mkdir -p out/lib # SQL-only extensions (pgtap, pgmq): Byre still expects lib/
             tar czf "dist/$EXT-$ver-pg$m-$BYRE_PLATFORM.tar.gz" -C out lib share
           done
           ls -l dist

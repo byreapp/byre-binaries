@@ -164,6 +164,180 @@
         "linux-arm64",
         "windows-x64"
       ]
+    },
+    {
+      "name": "plpgsql_check",
+      "version": "2.11.0",
+      "source": "https://github.com/okbob/plpgsql_check",
+      "title": "plpgsql_check",
+      "description": "Linter, profiler and tracer for PL/pgSQL functions",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "pgtap",
+      "version": "1.3.4",
+      "source": "https://github.com/theory/pgtap",
+      "title": "pgTAP",
+      "description": "Unit testing framework for Postgres, written in SQL",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "pgmq",
+      "version": "1.13.2",
+      "source": "https://github.com/pgmq/pgmq",
+      "title": "PGMQ",
+      "description": "Lightweight message queue (like SQS) on Postgres tables",
+      "subdir": "pgmq-extension",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "pg_hint_plan",
+      "version": "1.9.0",
+      "source": "https://github.com/ossc-db/pg_hint_plan",
+      "title": "pg_hint_plan",
+      "description": "Steer query plans with hints in SQL comments",
+      "preload": true,
+      "tags": {
+        "14": "REL14_1_4_5",
+        "15": "REL15_1_5_4",
+        "16": "REL16_1_6_3",
+        "17": "REL17_1_7_2",
+        "18": "REL18_1_8_1",
+        "19": "REL19_1_9_0"
+      },
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "pgaudit",
+      "version": "19.0",
+      "source": "https://github.com/pgaudit/pgaudit",
+      "title": "pgAudit",
+      "description": "Detailed session and object audit logging",
+      "preload": true,
+      "tags": {
+        "14": "1.6.4",
+        "15": "1.7.2",
+        "16": "16.2",
+        "17": "17.2",
+        "18": "18.1",
+        "19": "19.0"
+      },
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "pg_repack",
+      "version": "1.5.3",
+      "source": "https://github.com/reorg/pg_repack",
+      "title": "pg_repack",
+      "description": "Remove table and index bloat without heavy locks",
+      "tag": "ver_1.5.3",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "pg_hashids",
+      "version": "1.2.1",
+      "source": "https://github.com/iCyberon/pg_hashids",
+      "title": "pg_hashids",
+      "description": "Short, unique, non-sequential ids from numbers (Hashids)",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
     }
   ]
 }
