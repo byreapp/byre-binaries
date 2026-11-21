@@ -5,12 +5,13 @@ engine=$1 tarball=$(cd "$(dirname "$2")" && pwd)/$(basename "$2")
 dir=$(mktemp -d)
 tar xzf "$tarball" -C "$dir"
 bin=$(echo "$dir"/*/bin)
-# Windows: a missing DLL makes the .exe exit 127 silently; list what it links.
-[[ $(uname -s) == MSYS* ]] && { ls "$bin"; ldd "$bin/$engine-server.exe" || true; cygcheck "$bin/$engine-server.exe" || true; pacman -Q msys2-runtime msys2-runtime-devel gcc || true; powershell -NoProfile -c "& '$(cygpath -w "$bin/$engine-server.exe")' --version; 'NTSTATUS: 0x{0:X8}' -f \$LASTEXITCODE" || true; }
-"$bin/$engine-server" --version
-"$bin/$engine-server" --port 63799 --daemonize yes --dir "$dir" --logfile "$dir/log"
-trap '"$bin/$engine-cli" -p 63799 shutdown nosave || true' EXIT
-for _ in $(seq 20); do "$bin/$engine-cli" -p 63799 ping 2>/dev/null | grep -q PONG && break; sleep 0.5; done
-"$bin/$engine-cli" -p 63799 set byre ok
-[ "$("$bin/$engine-cli" -p 63799 get byre)" = ok ] || { cat "$dir/log"; exit 1; }
+# Windows: launch through cmd, like Byre does (a native parent). Since msys2-runtime
+# 3.6.12 an .exe with its bundled msys-2.0.dll exits 127 when started from MSYS bash.
+run() { if [[ $(uname -s) == MSYS* ]]; then cmd //c "$(cygpath -w "$1").exe" "${@:2}"; else "$@"; fi; }
+run "$bin/$engine-server" --version
+run "$bin/$engine-server" --port 63799 --daemonize yes --dir "$dir" --logfile "$dir/log"
+trap 'run "$bin/$engine-cli" -p 63799 shutdown nosave || true' EXIT
+for _ in $(seq 20); do run "$bin/$engine-cli" -p 63799 ping 2>/dev/null | grep -q PONG && break; sleep 0.5; done
+run "$bin/$engine-cli" -p 63799 set byre ok
+[ "$(run "$bin/$engine-cli" -p 63799 get byre | tr -d '\r')" = ok ] || { cat "$dir/log"; exit 1; }
 echo "$engine OK"
