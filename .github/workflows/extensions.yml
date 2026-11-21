@@ -97,7 +97,7 @@ jobs:
       - if: matrix.ext == 'postgis' && runner.os == 'Linux'
         run: sudo apt-get install -yq patchelf libgeos-dev libproj-dev libjson-c-dev libxml2-dev libprotobuf-c-dev protobuf-c-compiler
       - if: matrix.ext == 'postgis' && runner.os == 'macOS'
-        run: brew install geos proj json-c protobuf-c libxml2
+        run: brew install geos proj json-c protobuf-c libxml2 gettext
       - name: Build for every Postgres major
         run: |
           set -euo pipefail

@@ -39,6 +39,8 @@ install)
   mk=()
   if [ $os = macos ]; then
     export CC=clang
+    # theseus' Intel build has NLS on: c.h includes libintl.h (not on the default path there).
+    export CPPFLAGS="-I$(brew --prefix gettext)/include"
     opts+=(--with-geosconfig="$(brew --prefix geos)/bin/geos-config" --with-jsondir="$(brew --prefix json-c)"
       --with-protobufdir="$(brew --prefix protobuf-c)" --with-xml2config="$(brew --prefix libxml2)/bin/xml2-config")
     # PG_SYSROOT: theseus' pg_config names its CI's SDK. Header pad: room for
