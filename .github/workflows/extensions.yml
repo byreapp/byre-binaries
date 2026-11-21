@@ -142,6 +142,8 @@ jobs:
               # would rewrite "/F" into a path.
               # PG 18+ headers need C11 (_Noreturn, alignas); CL = extra cl.exe options.
               cl=; [ -f "$root/include/server/optimizer/extendplan.h" ] && cl=-std:c11
+              # Our own builds (PG 19+) have no gettext; pg_cron's Makefile.win links libintl unconditionally.
+              [ -f "$root/lib/libintl.lib" ] || sed -i 's/"$(LIBDIR)\\libintl.lib"//' "$src/Makefile.win"
               (cd "$src" && CL="$cl" PGROOT="$(cygpath -w "$root")" nmake -NOLOGO -f Makefile.win clean all install)
             elif [ "$RUNNER_OS" = Windows ]; then
               scripts/build-ext-windows.sh "$src" "$root"
