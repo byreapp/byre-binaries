@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T19:42:17Z",
+  "updated": "2026-11-21T19:43:15Z",
   "engines": [
     {
       "id": "postgres",
@@ -397,6 +397,29 @@
         "16",
         "17",
         "18"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ]
+    },
+    {
+      "name": "plpgsql_check",
+      "title": "plpgsql_check",
+      "version": "2.11.0",
+      "description": "Linter, profiler and tracer for PL/pgSQL functions",
+      "source": "https://github.com/okbob/plpgsql_check",
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-plpgsql_check-2.11.0/plpgsql_check-2.11.0-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
       ],
       "platforms": [
         "macos-arm64",
