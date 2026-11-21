@@ -17,7 +17,10 @@ cd "$prefix-src"
 # Cygwin's ctype trips hiredis' -Werror=char-subscripts; asprintf needs _GNU_SOURCE.
 if [[ $(uname -s) == MSYS* ]]; then
   sed -i 's/__GNU_VISIBLE/1/' /usr/include/dlfcn.h
-  export CFLAGS="-Wno-char-subscripts -D_GNU_SOURCE"
+  # Cygwin's FD_SETSIZE is 64 but the select() backend is sized for maxclients+128:
+  # Valkey 9.2+ refuses to start ("Failed creating the event loop"), older builds
+  # overflow fd_set past ~60 connections.
+  export CFLAGS="-Wno-char-subscripts -D_GNU_SOURCE -DFD_SETSIZE=16384"
   # Redis' test modules (.so) don't link under Cygwin; they're tests only.
   sed -i '/^all:/s/ module_tests//' src/Makefile
 fi
