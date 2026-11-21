@@ -61,6 +61,7 @@
   },
   "valkey": {
     "versions": [
+      "9.2.0",
       "9.1.4"
     ],
     "platforms": [
