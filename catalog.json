@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T19:42:06Z",
+  "updated": "2026-11-21T19:42:17Z",
   "engines": [
     {
       "id": "postgres",
@@ -473,6 +473,27 @@
         "macos-x64",
         "linux-x64",
         "linux-arm64"
+      ]
+    },
+    {
+      "name": "pg_repack",
+      "title": "pg_repack",
+      "version": "1.5.3",
+      "description": "Remove table and index bloat without heavy locks",
+      "source": "https://github.com/reorg/pg_repack",
+      "url": "https://github.com/byreapp/byre-binaries/releases/download/ext-pg_repack-1.5.3/pg_repack-1.5.3-pg{major}-{platform}.tar.gz",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64"
       ]
     },
     {
