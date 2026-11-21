@@ -94,6 +94,10 @@ jobs:
       # theseus' Linux build has GSSAPI on, so libpq-be.h (pgaudit) includes gssapi.h.
       - if: runner.os == 'Linux'
         run: sudo apt-get install -yq libkrb5-dev
+      - if: matrix.ext == 'postgis' && runner.os == 'Linux'
+        run: sudo apt-get install -yq patchelf libgeos-dev libproj-dev libjson-c-dev libxml2-dev libprotobuf-c-dev protobuf-c-compiler
+      - if: matrix.ext == 'postgis' && runner.os == 'macOS'
+        run: brew install geos proj json-c protobuf-c libxml2
       - name: Build for every Postgres major
         run: |
           set -euo pipefail
@@ -116,7 +120,9 @@ jobs:
           fetch() {
             [ "$1" = "$fetched" ] && return
             rm -rf "$base" src.tgz && mkdir -p "$base"
-            if [ -n "$1" ]; then
+            if [ -n "$(jq -r '.src_url // ""' <<<"$ext")" ]; then # release tarball (PostGIS: has configure)
+              curl -fsSL "$(jq -r '.src_url' <<<"$ext" | sed "s/{version}/$ver/")" -o src.tgz
+            elif [ -n "$1" ]; then
               curl -fsSL "$repo/archive/refs/tags/$1.tar.gz" -o src.tgz
             else
               curl -fsSL "$repo/archive/refs/tags/v$ver.tar.gz" -o src.tgz ||
@@ -149,7 +155,9 @@ jobs:
             # Snapshot, so packaging takes exactly what the install added (names
             # vary: timescaledb-<ver>.so, pg_partman_bgw.so, …).
             before=$(cd "$root" && find lib share/extension -type f | sort)
-            if [ "$RUNNER_OS" = Windows ] && [ "$build" = cmake ]; then
+            if [ "$build" = postgis ]; then
+              scripts/build-postgis.sh install "$src" "$root" "$m" "$ver"
+            elif [ "$RUNNER_OS" = Windows ] && [ "$build" = cmake ]; then
               rm -rf "$src/build"
               cmake -S "$src" -B "$src/build" -G Ninja -DPG_CONFIG="$cfg.exe" -DAPACHE_ONLY=ON \
                 -DREGRESS_CHECKS=OFF -DTAP_CHECKS=OFF -DWARNINGS_AS_ERRORS=OFF -DSEND_TELEMETRY_DEFAULT=OFF \
@@ -200,7 +208,9 @@ jobs:
             mkdir out && tar cf - -C "$root" -T added.txt | tar xf - -C out
             ls out/share/extension/"$EXT".control >/dev/null # fail if nothing was installed
             mkdir -p out/lib # SQL-only extensions (pgtap, pgmq): Byre still expects lib/
-            tar czf "dist/$EXT-$ver-pg$m-$BYRE_PLATFORM.tar.gz" -C out lib share
+            [ "$build" != postgis ] || scripts/build-postgis.sh deps out "$root"
+            tar czf "dist/$EXT-$ver-pg$m-$BYRE_PLATFORM.tar.gz" -C out $(cd out && ls -d lib share bin 2>/dev/null)
+            [ "$build" != postgis ] || scripts/build-postgis.sh test "dist/$EXT-$ver-pg$m-$BYRE_PLATFORM.tar.gz" pg.tgz
           done
           ls -l dist
       - uses: actions/upload-artifact@v7

@@ -344,6 +344,34 @@
         "windows-x64"
       ],
       "prepare": "perl -pi -e 's/^extern Datum id_/extern PGDLLEXPORT Datum id_/' pg_hashids.c"
+    },
+    {
+      "name": "postgis",
+      "version": "3.7.0",
+      "source": "https://github.com/postgis/postgis",
+      "src_url": "https://download.osgeo.org/postgis/source/postgis-{version}.tar.gz",
+      "build": "postgis",
+      "title": "PostGIS",
+      "description": "Geospatial types, indexes and functions (with postgis_topology)",
+      "majors": [
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "platforms": [
+        "macos-arm64",
+        "macos-x64",
+        "linux-x64",
+        "linux-arm64",
+        "windows-x64"
+      ],
+      "skip": [
+        "pg14-windows-x64",
+        "pg15-windows-x64"
+      ]
     }
   ]
 }
