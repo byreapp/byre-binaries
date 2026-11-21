@@ -14,8 +14,8 @@ mkdir -p "$lib"
 machos() { find "$root" -type f ! -name '*.a' ! -name '*.o' -print0 | xargs -0 file | grep 'Mach-O' | cut -d: -f1 | sort -u; }
 foreign() { case "$1" in /opt/homebrew/*|/usr/local/*|"$root"/*) return 0;; esac; return 1; }
 
-# Copy a dependency and, recursively, what it links (absolute Homebrew paths or
-# @loader_path siblings, as icu4c uses).
+# Copy a dependency and, recursively, what it links (absolute Homebrew paths,
+# @loader_path siblings as icu4c uses, or @rpath ones as geos uses).
 bundle() {
   local src=$1 name d
   name=$(basename "$src")
@@ -25,6 +25,12 @@ bundle() {
     case "$d" in
       /opt/homebrew/*|/usr/local/*) bundle "$d" ;;
       @loader_path/*) bundle "$(dirname "$(realpath "$src")")/${d#@loader_path/}" ;;
+      # @rpath siblings (Homebrew geos: libgeos_c -> @rpath/libgeos.*), via src's rpaths.
+      @rpath/*)
+        for rp in $(otool -l "$src" | awk '/LC_RPATH/{getline; getline; print $2}'); do
+          rp=${rp/@loader_path/$(dirname "$(realpath "$src")")}
+          if [ -e "$rp/${d#@rpath/}" ]; then bundle "$rp/${d#@rpath/}"; break; fi
+        done ;;
     esac
   done
 }
