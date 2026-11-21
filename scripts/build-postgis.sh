@@ -46,6 +46,8 @@ install)
     mk=("PG_SYSROOT=$(xcrun --show-sdk-path)" "PG_LDFLAGS=-Wl,-headerpad_max_install_names")
   fi
   ./configure "${opts[@]}"
+  # Man pages include raster2pgsql.1, which a no-raster build lacks; Byre doesn't need them.
+  perl -pi -e 's/^install: comments-install man-install/install: comments-install/' doc/Makefile
   make -j4 "${mk[@]}"
   make install "${mk[@]}"
   ;;

@@ -45,6 +45,10 @@ for f in "${cppflags[@]}"; do
   esac
 done
 [ -f "$src/byre-defs.h" ] && cflags+=(-FI"$(cygpath -m "$src/byre-defs.h")")
+# Our own PG 19+ builds use OpenSSL but don't ship its headers (theseus' do); libpq-be.h
+# (pgaudit) includes them. The runner's OpenSSL 3 headers match well enough.
+ossl="C:/Program Files/OpenSSL/include"
+[ -f "$root/include/openssl/ssl.h" ] || [ ! -d "$ossl" ] || cflags+=(-I"$ossl")
 # Same rule as pgvector's Makefile.win: 18+ headers need C11 (and its conforming
 # preprocessor, for PG_MODULE_MAGIC_DATA's __VA_ARGS__).
 pgnum=$(sed -n 's/^#define PG_VERSION_NUM //p' "$root/include/server/pg_config.h" | tr -d '\r')
